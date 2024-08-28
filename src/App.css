@@ -1,0 +1,144 @@
+body {
+    background-color: rgb(32, 32, 32);
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(32, 32, 32);
+    color: white;
+    min-height: 165px;
+    filter: drop-shadow(0px 2px 12px rgb(107, 107, 107))
+  }
+  
+  .link-container {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+  
+  
+  .link-container > a{
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+
+  }
+  
+  .logo-container > img {
+    max-width: 220px;
+  }
+  
+  .signin-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .signin-container > button {
+    margin: 10px;
+    padding: 14px 24px;
+    background-color: rgb(32, 32, 32);
+    border: 2px solid rgb(6, 144, 103);
+    color: rgb(6, 144, 103);
+    border-radius: 300px;
+    font-size: 18px;
+  }
+  
+  .signin-container span > img {
+    max-width: 25px;
+    align-items: center;
+    
+  }
+  
+  
+  
+  .main-container {
+    background-color: rgb(32, 32, 32);
+    height: 60vh;
+  }
+
+
+  .body-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+.body-container > h1 {
+    color: white;
+    margin: 20px;
+    font-weight: 400;
+    font-size: 40px;
+}
+
+Label {
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+    padding: 20px;
+}
+
+Label > Select {
+    width: 150px;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+
+
+
+
+
+.item-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.list-item {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    color: black;
+    /* border: 1px solid red; */
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 5px;
+    width: 200px;
+    height: 250px;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(177, 177, 177);
+    filter: drop-shadow(3px 3px 1px rgba(0, 0, 0, 0.1));
+}
+
+.list-item:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.5s;
+}
+
+
+
+.item-container img {
+    margin-top: 20px;
+    max-width: 100%; /* Ensures the image doesn’t overflow the container */
+    height: auto;    /* Maintains the aspect ratio */
+    object-fit: cover; /* Scales the image to cover the container */
+    max-height: 150px; /* Optional: sets a maximum height for the image */
+    border-radius: 8px; /* Optional: adds rounded corners to the image */
+    
+}

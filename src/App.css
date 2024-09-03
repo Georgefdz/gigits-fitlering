@@ -142,3 +142,13 @@ Label > Select {
     border-radius: 8px; /* Optional: adds rounded corners to the image */
     
 }
+
+.filter-container {
+  display: flex;
+}
+
+.react-select__control {
+  width: 250px;
+  font-size: 18px;
+}
+

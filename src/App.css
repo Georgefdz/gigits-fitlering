@@ -1,16 +1,104 @@
+:root {
+  --main-bg-color: rgb(32, 32, 32);
+  --main-green-color: #76b39d;
+  font-size: 12px;
+}
+
+
+
 body {
-    background-color: rgb(32, 32, 32);
+    background-color: var(--main-bg-color);
+    overflow: hidden;
 }
 
 
 .header-container {
     display: flex;
     justify-content: space-between;
-    background-color: rgb(32, 32, 32);
+    background-color: var(--main-bg-color);
     color: white;
     min-height: 165px;
     filter: drop-shadow(0px 2px 12px rgb(107, 107, 107))
   }
+
+.icon {
+  position: absolute;
+  left: -46px;
+  color: #76b39d
+  ;
+}
+
+.plus-circle-container {
+  display: flex;
+  justify-content: center;
+}
+
+.left-side {
+  display: flex;
+  flex-direction: row;
+}
+
+.left-side:hover {
+  cursor: pointer;
+}
+
+
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    border-left: 1px solid white;
+    margin-left: 20px;
+    transform: scale(.8);
+  }
+
+  .title-container > h2 {
+    font-size: 5.5rem;
+    font-weight: 400;
+  }
+
+  .title-container > h2 > span {
+    color: var(--main-green-color);
+  }
+
+
+  .title-container > h3 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    align-self: flex-start;
+  }
+
+  @media (max-width: 768px) {
+
+    .header-container {
+      align-items: center;
+      min-height: 80px;
+    }
+
+    .title-container {
+      height: fit-content;
+    }
+
+    .title-container > h2 {
+      font-size: 2rem;
+    }
+    .title-container > h3 {
+      font-size: 1rem;
+    }
+
+    .logo-container {
+      height: fit-content;
+    }
+
+    .logo-container img {
+    width: 100px;
+   
+    }
+
+  }
+  
   
   .link-container {
     display: flex;
@@ -23,13 +111,20 @@ body {
     text-decoration: none;
     color: white;
     padding: 10px;
-    font-size: 18px;
+    font-size: 2rem;
   }
   
   .logo-container {
     display: flex;
     align-items: center;
+    transition: 2s;
+  }
 
+  .logo-container:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 2s;
+  
   }
   
   .logo-container > img {
@@ -45,9 +140,9 @@ body {
   .signin-container > button {
     margin: 10px;
     padding: 14px 24px;
-    background-color: rgb(32, 32, 32);
-    border: 2px solid rgb(6, 144, 103);
-    color: rgb(6, 144, 103);
+    background-color: var(--main-bg-color);
+    border: 2px solid var(--main-green-color);
+    color: #76b39d    ;
     border-radius: 300px;
     font-size: 18px;
   }
@@ -61,9 +156,12 @@ body {
   
   
   .main-container {
-    background-color: rgb(32, 32, 32);
+    background-color: var(--main-bg-color);
     height: 60vh;
   }
+
+
+
 
 
   .body-container {
@@ -71,13 +169,14 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    background-color: var(--main-bg-color);
   }
 
 .body-container > h1 {
     color: white;
     margin: 20px;
     font-weight: 400;
-    font-size: 40px;
+    font-size: 3.5rem;
 }
 
 Label {
@@ -94,17 +193,12 @@ Label > Select {
     margin: 10px;
 }
 
-
-
-
-
-
 .item-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-}
 
+}
 
 .list-item {
     display: flex;
@@ -143,12 +237,441 @@ Label > Select {
     
 }
 
+
+
+
 .filter-container {
   display: flex;
 }
 
+.filter-container>label {
+  font-size: 18px;
+}
+
 .react-select__control {
   width: 250px;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.react-select__menu {
+  font-size: 14px;
+}
+
+
+.spotify-container {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0px;
+}
+
+.body-container > h3 {
+  font-size: 2.7rem;
+  font-weight: 300;
+  color: var(--main-green-color);
+}
+
+.grid-divider {
+  margin-top: 100px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, minmax(100px, 250px));
+  width: 90vw;
+  height: 60vh;
+  gap: 20px;
+  align-items: baseline;
+  position: relative;
+}
+
+.grid-divider-two {
+  transform: scale(.8);
+  display: grid;  
+  gap: 20px;
+}
+
+
+
+.bookshelf-container {
+  grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bookshelf-container2 {
+  display: grid;
+  grid-template-columns: repeat(50, 30px);
+  justify-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+  align-items: end;
+  
+}
+
+
+.podcast-container {
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+.podcastshelf {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--main-bg-color);
+  gap: 1px;
+}
+
+.podcastshelf2 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--main-bg-color);
+  gap: 1px;
+  flex-wrap: wrap;
+}
+
+.podcast {
+  min-width: 50px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* .podcast:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+} */
+
+.podcast-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.podcast-title {
+  display: none;
+  position: absolute;
+  color: transparent;
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+}
+
+
+
+.bookshelf {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--main-bg-color);
+  gap: 1px;
+}
+
+.bookshelf2 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--main-bg-color);
+  gap: 1px;
+  width: 100%;
+  margin: auto;
+}
+
+.book {
+  min-width: 15px;
+  max-width: 35px;
+  /* Adjust the width of each book */
+  height: auto;
+  /* Let the height adjust based on the image's aspect ratio */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.book2 {
+  width: 30px;
+  /* Adjust the width of each book */
+  height: auto;
+  /* Let the height adjust based on the image's aspect ratio */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book2:hover {
+  transform: scale(1.1) rotate(10deg) translate(10px, -10px);
+  transition: all .5s ease;
+  z-index: 10;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.book-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  /* Ensures the image keeps its aspect ratio */
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+  display: none;
+  position: absolute;
+  color: transparent;
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+}
+
+.book-title2 {
+  display: none;
+  position: absolute;
+  color: transparent;
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+}
+
+.book-title2:hover {
+  color: red;
+}
+
+/* .book:hover .book-title {
+  color: black;
+} */
+
+.shelf-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  height: auto;
+  object-fit: scale-down;
+  /* Ensures the image keeps its aspect ratio */
+  border-radius: .01px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shelf-image2 {
+  grid-column: 1 / -1;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.podcast2 {
+  width: 150px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+}
+
+.podcast2:hover {
+  transform: scale(1.1) rotate(380deg) translate(10px, -10px);
+  transition: all .6s ease;
+  z-index: 10;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.podcast-button {
+  cursor: pointer;
+  position: absolute;
+  top: 22%;
+  font-size: 54px;
+  background-color: gray;
+  color: white;
+  padding: 50px 150px;
+  border-radius: 10px;
+  border: none;
+}
+
+.book-button {
+  cursor: pointer;
+  position: absolute;
+  top: 22%;
+  font-size: 54px;
+  background-color: gray;
+  color: white;
+  padding: 50px 150px;
+  border-radius: 10px;
+  border: none;
+}
+
+.podcast-button:active {
+  background-color: var(--main-green-color);
+}
+
+.book-button:active {
+  background-color: var(--main-green-color);
+}
+
+.top-picks-button {
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: transparent;
+  height: 20px;
+  padding: 20px 200px;
+  border-radius: 100px;
+  border:3px solid var(--main-green-color);
+margin: auto;
+}
+
+.top-picks-button > span {
+  font-size: 28px;
+  margin-right: 10px;
+}
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  width: 800px;
+  height: 450px;
+  background-color: gray;
+  border-radius: 50px;
+  color: white;
+}
+
+.modal > h2 {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal > h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 40px;
+}
+
+
+.top-picks-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  margin-left: 50px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+
+
+  .body-container {
+    padding: 0;
+  }
+
+
+  .body-container > h1 {
+    font-size: 3rem;
+  }
+
+  .body-container > h3 {
+    font-size: 2.2rem;
+    margin: 0px 20px;
+  }
+
+  .grid-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .bookshelf-container {
+    transform: scale(.8);
+  }
+
+  .bookshelf-container2 {
+    grid-template-columns: repeat(15, 30px);
+    height: 65vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .podcast-button {
+    position: relative;
+    padding: 20px 50px;
+    font-size: 3rem;
+  }
+
+  .book-button {
+    position: relative;
+    padding: 30px 80px;
+    font-size: 3rem;
+  }
+
+  .top-picks-button {
+    padding: 20px 80px;
+  }
+
+  .podcast2 {
+    width: 145px;
+  }
+
+  .filter-container {
+    display: none;
+  }
+
+  .modal {
+    width: 100vw;
+    height: fit-content;
+    padding-bottom: 50px;
+  }
+
+  .top-picks-list {
+    margin-left: 15px
+  }
+
+  /* :root {
+    background-color: var(--main-bg-color);
+  }
+
+  .top-picks-button {
+    background-color: var(--main-bg-color);
+  } */
+
+  :root > body {
+    background-color: var(--main-bg-color);
+    overflow-y: hidden;
+  }
+
+
 }
 

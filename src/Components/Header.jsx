@@ -1,25 +1,35 @@
-import React from 'react'
-import logo from '../logo.png'
-import globe from '../globe.png'
-
+import React from "react";
+import logo from "../logo.png";
+import PlusCircle from "./PlusCircle.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
+  function handleGigitsRoute() {
+    window.location.href = "https://gigits.io/";
+  }
+
+  function handleHomeRoute() {
+    navigate("/");
+  }
+
   return (
     <div className='header-container'>
-        <div className='link-container'>
-            <a href='https://gigits.io/'>Time Hacker</a>
-            <a href='https://gigits.io/about'>About Gigits</a>
-            <a href='https://gigits.io/platform'>Productivity App</a>
+      <div className='left-side' onClick={handleHomeRoute}>
+        <div className='title-container'>
+          <PlusCircle fill='transparent' />
+          <h2>
+            The <span>School</span> of Life
+          </h2>
+          <h3>real-world knowledge</h3>
         </div>
-        <div className='logo-container'>
-            <img src={logo} alt='logo' />
-        </div>
-        <div className='signin-container'>
-            <span> <img src={globe} alt="" />English</span>
-            <button>Sign in</button>
-        </div>
+      </div>
+      <div className='logo-container' onClick={handleGigitsRoute}>
+        <span>back to</span>
+        <img src={logo} alt='logo' />
+      </div>
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;

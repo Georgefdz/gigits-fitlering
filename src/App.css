@@ -4,28 +4,31 @@
   font-size: 12px;
 }
 
-
-
 body {
-    background-color: var(--main-bg-color);
-    overflow: hidden;
+  background-color: var(--main-bg-color);
+  overflow: hidden;
 }
 
-
+/* Header Styles */
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--main-bg-color);
-    color: white;
-    min-height: 165px;
-    filter: drop-shadow(0px 2px 12px rgb(107, 107, 107))
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 165px;
+  background-color: var(--main-bg-color);
+  color: white;
+  filter: drop-shadow(0px 2px 12px rgb(107, 107, 107));
+}
 
 .icon {
   position: absolute;
   left: -46px;
-  color: #76b39d
-  ;
+  color: var(--main-green-color);
+}
+
+.left-side {
+  display: flex;
+  cursor: pointer;
 }
 
 .plus-circle-container {
@@ -33,218 +36,165 @@ body {
   justify-content: center;
 }
 
-.left-side {
+.title-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  margin-left: 20px;
+  border-left: 1px solid white;
+  transform: scale(0.8);
 }
 
-.left-side:hover {
+.title-container > h2 {
+  font-size: 5.5rem;
+  font-weight: 400;
+}
+
+.title-container > h2 > span {
+  color: var(--main-green-color);
+}
+
+.title-container > h3 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  align-self: flex-start;
+}
+
+.link-container {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.link-container > a {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  font-size: 2rem;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  transition: transform 2s;
+}
+
+.logo-container:hover {
   cursor: pointer;
+  transform: scale(1.05);
 }
 
+.logo-container > img {
+  max-width: 220px;
+}
 
-  .title-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-left: 20px;
-    border-left: 1px solid white;
-    margin-left: 20px;
-    transform: scale(.8);
-  }
+.signin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .title-container > h2 {
-    font-size: 5.5rem;
-    font-weight: 400;
-  }
+.signin-container > button {
+  margin: 10px;
+  padding: 14px 24px;
+  background-color: var(--main-bg-color);
+  border: 2px solid var(--main-green-color);
+  color: var(--main-green-color);
+  border-radius: 300px;
+  font-size: 18px;
+}
 
-  .title-container > h2 > span {
-    color: var(--main-green-color);
-  }
+.signin-container span > img {
+  max-width: 25px;
+  align-items: center;
+}
 
+.main-container {
+  background-color: var(--main-bg-color);
+  height: 60vh;
+}
 
-  .title-container > h3 {
-    font-size: 2.5rem;
-    font-weight: 300;
-    align-self: flex-start;
-  }
-
-  @media (max-width: 768px) {
-
-    .header-container {
-      align-items: center;
-      min-height: 80px;
-    }
-
-    .title-container {
-      height: fit-content;
-    }
-
-    .title-container > h2 {
-      font-size: 2rem;
-    }
-    .title-container > h3 {
-      font-size: 1rem;
-    }
-
-    .logo-container {
-      height: fit-content;
-    }
-
-    .logo-container img {
-    width: 100px;
-   
-    }
-
-  }
-  
-  
-  .link-container {
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-  }
-  
-  
-  .link-container > a{
-    text-decoration: none;
-    color: white;
-    padding: 10px;
-    font-size: 2rem;
-  }
-  
-  .logo-container {
-    display: flex;
-    align-items: center;
-    transition: 2s;
-  }
-
-  .logo-container:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-    transition: transform 2s;
-  
-  }
-  
-  .logo-container > img {
-    max-width: 220px;
-  }
-  
-  .signin-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .signin-container > button {
-    margin: 10px;
-    padding: 14px 24px;
-    background-color: var(--main-bg-color);
-    border: 2px solid var(--main-green-color);
-    color: #76b39d    ;
-    border-radius: 300px;
-    font-size: 18px;
-  }
-  
-  .signin-container span > img {
-    max-width: 25px;
-    align-items: center;
-    
-  }
-  
-  
-  
-  .main-container {
-    background-color: var(--main-bg-color);
-    height: 60vh;
-  }
-
-
-
-
-
-  .body-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: var(--main-bg-color);
-  }
+/* Body Styles */
+.body-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--main-bg-color);
+}
 
 .body-container > h1 {
-    color: white;
-    margin: 20px;
-    font-weight: 400;
-    font-size: 3.5rem;
+  color: white;
+  margin: 20px;
+  font-weight: 400;
+  font-size: 3.5rem;
 }
 
-Label {
-    color: white;
-    font-size: 20px;
-    margin: 10px;
-    padding: 20px;
+.body-container > h3 {
+  font-size: 2.7rem;
+  font-weight: 300;
+  color: var(--main-green-color);
 }
 
-Label > Select {
-    width: 150px;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
+label {
+  color: white;
+  font-size: 20px;
+  margin: 10px;
+  padding: 20px;
+}
+
+label > select {
+  width: 150px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
 }
 
 .item-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .list-item {
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
-    color: black;
-    /* border: 1px solid red; */
-    border-radius: 5px;
-    list-style-type: none;
-    padding: 5px;
-    width: 200px;
-    height: 250px;
-    justify-content: space-around;
-    align-items: center;
-    text-align: center;
-    background-color: rgb(177, 177, 177);
-    filter: drop-shadow(3px 3px 1px rgba(0, 0, 0, 0.1));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 5px;
+  width: 200px;
+  height: 250px;
+  color: black;
+  background-color: rgb(177, 177, 177);
+  border-radius: 5px;
+  filter: drop-shadow(3px 3px 1px rgba(0, 0, 0, 0.1));
 }
 
 .list-item:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-    transform: scale(1.05);
-    transition: transform 0.5s;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.5s;
 }
-
-
 
 .item-container img {
-    margin-top: 20px;
-    max-width: 100%; /* Ensures the image doesn’t overflow the container */
-    height: auto;    /* Maintains the aspect ratio */
-    object-fit: cover; /* Scales the image to cover the container */
-    max-height: 150px; /* Optional: sets a maximum height for the image */
-    border-radius: 8px; /* Optional: adds rounded corners to the image */
-    
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 150px;
+  border-radius: 8px;
 }
-
-
-
 
 .filter-container {
   display: flex;
 }
 
-.filter-container>label {
+.filter-container > label {
   font-size: 18px;
 }
 
@@ -257,46 +207,39 @@ Label > Select {
   font-size: 14px;
 }
 
-
 .spotify-container {
   display: flex;
   justify-content: center;
-  margin: 50px 0px;
+  margin: 50px 0;
 }
 
-.body-container > h3 {
-  font-size: 2.7rem;
-  font-weight: 300;
-  color: var(--main-green-color);
-}
-
+/* Grid Layouts */
 .grid-divider {
   margin-top: 100px;
   padding: 20px;
   display: grid;
+  gap: 20px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(2, minmax(100px, 250px));
   width: 90vw;
   height: 60vh;
-  gap: 20px;
   align-items: baseline;
   position: relative;
 }
 
 .grid-divider-two {
-  transform: scale(.8);
-  display: grid;  
+  display: grid;
   gap: 20px;
+  transform: scale(0.8);
 }
 
-
-
+/* Bookshelf Styles */
 .bookshelf-container {
-  grid-column: 2 / 3;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  grid-column: 2 / 3;
 }
 
 .bookshelf-container2 {
@@ -306,22 +249,78 @@ Label > Select {
   width: 100%;
   margin-bottom: 30px;
   align-items: end;
-  
 }
 
+.bookshelf,
+.bookshelf2 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--main-bg-color);
+  gap: 1px;
+}
 
-.podcast-container {
-  grid-column: 1 / 2;
+.bookshelf2 {
+  width: 100%;
+  margin: auto;
+}
+
+.book,
+.book2 {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  height: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.book {
+  min-width: 15px;
+  max-width: 35px;
+}
 
+.book2 {
+  width: 30px;
+}
 
+.book2:hover {
+  transform: scale(1.1) rotate(10deg) translate(10px, -10px);
+  transition: all 0.5s ease;
+  z-index: 10;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
 
-.podcastshelf {
+.book-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-title,
+.book-title2 {
+  display: none;
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  color: transparent;
+}
+
+/* Podcast Styles */
+.podcast-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / 2;
+}
+
+.podcastshelf,
+.podcastshelf2 {
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -330,17 +329,11 @@ Label > Select {
 }
 
 .podcastshelf2 {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background-color: var(--main-bg-color);
-  gap: 1px;
   flex-wrap: wrap;
 }
 
-.podcast {
-  min-width: 50px;
-  height: auto;
+.podcast,
+.podcast2 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -348,11 +341,21 @@ Label > Select {
   cursor: pointer;
 }
 
-/* .podcast:hover {
-  transform: scale(1.1);
+.podcast {
+  min-width: 50px;
+  height: auto;
+}
+
+.podcast2 {
+  width: 150px;
+}
+
+.podcast2:hover {
+  transform: scale(1.1) rotate(380deg) translate(10px, -10px);
+  transition: all 0.6s ease;
   z-index: 10;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-} */
+}
 
 .podcast-image {
   width: 100%;
@@ -365,190 +368,66 @@ Label > Select {
 .podcast-title {
   display: none;
   position: absolute;
-  color: transparent;
+  width: 100%;
+  padding: 10px;
   font-size: 12px;
   text-align: center;
-  padding: 10px;
-  width: 100%;
-}
-
-
-
-.bookshelf {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background-color: var(--main-bg-color);
-  gap: 1px;
-}
-
-.bookshelf2 {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background-color: var(--main-bg-color);
-  gap: 1px;
-  width: 100%;
-  margin: auto;
-}
-
-.book {
-  min-width: 15px;
-  max-width: 35px;
-  /* Adjust the width of each book */
-  height: auto;
-  /* Let the height adjust based on the image's aspect ratio */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-.book2 {
-  width: 30px;
-  /* Adjust the width of each book */
-  height: auto;
-  /* Let the height adjust based on the image's aspect ratio */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.book2:hover {
-  transform: scale(1.1) rotate(10deg) translate(10px, -10px);
-  transition: all .5s ease;
-  z-index: 10;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.book-image {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  /* Ensures the image keeps its aspect ratio */
-  border-radius: 3px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.book-title {
-  display: none;
-  position: absolute;
   color: transparent;
-  font-size: 12px;
-  text-align: center;
-  padding: 10px;
-  width: 100%;
 }
 
-.book-title2 {
-  display: none;
-  position: absolute;
-  color: transparent;
-  font-size: 12px;
-  text-align: center;
-  padding: 10px;
+.shelf-image,
+.shelf-image2 {
   width: 100%;
-}
-
-.book-title2:hover {
-  color: red;
-}
-
-/* .book:hover .book-title {
-  color: black;
-} */
-
-.shelf-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  text-align: center;
   height: auto;
   object-fit: scale-down;
-  /* Ensures the image keeps its aspect ratio */
-  border-radius: .01px;
+  border-radius: 0.01px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .shelf-image2 {
   grid-column: 1 / -1;
   margin-bottom: 40px;
-  width: 100%;
 }
 
-.podcast2 {
-  width: 150px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-}
-
-.podcast2:hover {
-  transform: scale(1.1) rotate(380deg) translate(10px, -10px);
-  transition: all .6s ease;
-  z-index: 10;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.podcast-button {
-  cursor: pointer;
-  position: absolute;
-  top: 22%;
-  font-size: 54px;
-  background-color: gray;
-  color: white;
-  padding: 50px 150px;
-  border-radius: 10px;
-  border: none;
-}
-
+/* Buttons */
+.podcast-button,
 .book-button {
-  cursor: pointer;
   position: absolute;
   top: 22%;
+  padding: 50px 150px;
   font-size: 54px;
   background-color: gray;
   color: white;
-  padding: 50px 150px;
-  border-radius: 10px;
   border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-.podcast-button:active {
-  background-color: var(--main-green-color);
-}
-
+.podcast-button:active,
 .book-button:active {
   background-color: var(--main-green-color);
 }
 
 .top-picks-button {
-  font-size: 22px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px 200px;
+  margin: auto;
+  height: 20px;
+  font-size: 22px;
   color: white;
   background-color: transparent;
-  height: 20px;
-  padding: 20px 200px;
+  border: 3px solid var(--main-green-color);
   border-radius: 100px;
-  border:3px solid var(--main-green-color);
-margin: auto;
 }
 
 .top-picks-button > span {
-  font-size: 28px;
   margin-right: 10px;
+  font-size: 28px;
 }
 
+/* Modal */
 .modal-container {
   display: flex;
   justify-content: center;
@@ -559,18 +438,13 @@ margin: auto;
   top: 0;
   width: 800px;
   height: 450px;
+  padding-bottom: 50px;
   background-color: gray;
-  border-radius: 50px;
   color: white;
+  border-radius: 50px;
 }
 
-.modal > h2 {
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+.modal > h2,
 .modal > h3 {
   display: flex;
   justify-content: center;
@@ -578,25 +452,45 @@ margin: auto;
   margin: 20px 40px;
 }
 
+.modal > h2 {
+  margin-top: 50px;
+}
 
 .top-picks-list {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  color: white;
   margin-left: 50px;
   font-size: 20px;
   font-weight: bold;
+  color: white;
 }
 
-
+/* Media Queries */
 @media (max-width: 768px) {
+  .header-container {
+    min-height: 80px;
+  }
 
+  .title-container {
+    height: fit-content;
+  }
+
+  .title-container > h2 {
+    font-size: 2rem;
+  }
+
+  .title-container > h3 {
+    font-size: 1rem;
+  }
+
+  .logo-container > img {
+    width: 100px;
+  }
 
   .body-container {
     padding: 0;
   }
-
 
   .body-container > h1 {
     font-size: 3rem;
@@ -604,7 +498,7 @@ margin: auto;
 
   .body-container > h3 {
     font-size: 2.2rem;
-    margin: 0px 20px;
+    margin: 0 20px;
   }
 
   .grid-divider {
@@ -615,7 +509,7 @@ margin: auto;
   }
 
   .bookshelf-container {
-    transform: scale(.8);
+    transform: scale(0.8);
   }
 
   .bookshelf-container2 {
@@ -625,12 +519,7 @@ margin: auto;
     overflow-x: hidden;
   }
 
-  .podcast-button {
-    position: relative;
-    padding: 20px 50px;
-    font-size: 3rem;
-  }
-
+  .podcast-button,
   .book-button {
     position: relative;
     padding: 30px 80px;
@@ -652,26 +541,13 @@ margin: auto;
   .modal {
     width: 100vw;
     height: fit-content;
-    padding-bottom: 50px;
   }
 
   .top-picks-list {
-    margin-left: 15px
+    margin-left: 15px;
   }
 
-  /* :root {
-    background-color: var(--main-bg-color);
-  }
-
-  .top-picks-button {
-    background-color: var(--main-bg-color);
-  } */
-
-  :root > body {
-    background-color: var(--main-bg-color);
+  body {
     overflow-y: hidden;
   }
-
-
 }
-

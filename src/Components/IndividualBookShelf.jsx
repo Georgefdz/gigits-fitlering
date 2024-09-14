@@ -89,7 +89,7 @@ const IndividualBookShelf = ({ books }) => {
       {selectedBook && (
         <Modal
           title={selectedBook.name}
-          closeModal={closeModal}
+          onClose={closeModal}
           author={selectedBook.author}
           oneLiner={selectedBook.oneLiner}
         />

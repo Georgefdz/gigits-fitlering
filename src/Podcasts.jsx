@@ -13,6 +13,7 @@ import Accordion2 from "./Components/Accordion2.jsx";
 function Podcasts() {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
+  const [topPicks, setTopPicks] = useState([]);
   const [filters, setFilters] = useState({
     skill: [],
     concept: [],
@@ -50,11 +51,20 @@ function Podcasts() {
               type: fields.Type || [],
               description: fields["Description"] || "",
               spotifyUrl: fields["Link to Reco"] || "",
+              topScore: fields["Top"] || 0,
             };
           });
 
           setRecords(formattedRecords);
           setFilteredRecords(formattedRecords);
+
+          // Filter the top 10 podcasts based on the "Top" field
+          const topPodcasts = formattedRecords
+            .filter((record) => record.topScore && !isNaN(record.topScore)) // Ensure valid top scores
+            .sort((a, b) => a.topScore - b.topScore) // Sort by "Top" field value
+            .slice(0, 10); // Get the top 10 podcasts
+
+          setTopPicks(topPodcasts); // Set top picks for display in the modal
 
           // Extract unique values for each filter field
           const extractUniqueValues = (records, field) => {
@@ -160,7 +170,13 @@ function Podcasts() {
         <>
           <div className='body-container'>
             <div className='grid-divider-two'>
-              {showTopPicks && <Modal title='Top Picks' topPicks={TopPicks} />}
+              {showTopPicks && (
+                <Modal
+                  title='Top Picks'
+                  topPicks={() => <TopPicks topList={topPicks} />}
+                  onClose={() => setShowTopPicks(false)}
+                />
+              )}
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualPodcastShelf podcasts={filteredRecords} />
             </div>
@@ -200,7 +216,7 @@ function Podcasts() {
               {showTopPicks && (
                 <Modal
                   title='Top Picks'
-                  topPicks={TopPicks}
+                  topPicks={() => <TopPicks topList={topPicks} />}
                   onClose={() => setShowTopPicks(false)}
                 />
               )}

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import SpotifyPlayer from "./SpotifyPlayer.jsx";
 
 function Modal({
@@ -10,19 +11,34 @@ function Modal({
   spotifyUrl,
   onClose,
 }) {
-  const handleBackgroundClick = () => {
-    if (onClose) {
-      onClose();
-    }
-  };
+  const modalRef = useRef(null);
+
+  // Hook to handle clicks/touches outside the modal
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        if (onClose) {
+          onClose(); // Close the modal if clicked outside
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [onClose]);
 
   const handleModalClick = (e) => {
-    e.stopPropagation(); // Prevents the click from propagating to the background
+    e.stopPropagation();
   };
 
-  return (
-    <div className='modal-container' onClick={handleBackgroundClick}>
-      <div className='modal' onClick={handleModalClick}>
+  return ReactDOM.createPortal(
+    <div className='modal-container'>
+      <div className='modal' ref={modalRef} onClick={handleModalClick}>
         {description && (
           <>
             <SpotifyPlayer url={spotifyUrl} />
@@ -38,7 +54,8 @@ function Modal({
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body // This renders the modal outside of the current DOM hierarchy
   );
 }
 

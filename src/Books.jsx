@@ -155,17 +155,23 @@ function Books() {
         <>
           <div className='body-container'>
             <div className='grid-divider-two'>
-              {showTopPicks && <Modal title='Top Picks' topPicks={TopPicks} />}
+              {showTopPicks && (
+                <Modal
+                  title='Top Picks'
+                  topPicks={TopPicks}
+                  onClose={() => setShowTopPicks(false)}
+                />
+              )}
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualBookShelf books={filteredRecords} />
             </div>
-            <button
+            {/* <button
               className='top-picks-button'
               onClick={() => setShowTopPicks((current) => !current)}
             >
               <PlusCircle fill='transparent' style={{ position: "relative" }} />
               <span>Top Picks</span>
-            </button>
+            </button> */}
           </div>
           <Drawer className='drawer'>
             <Accordion2
@@ -201,13 +207,13 @@ function Books() {
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualBookShelf books={filteredRecords} />
             </div>
-            <button
+            {/* <button
               className='top-picks-button'
               onClick={() => setShowTopPicks((current) => !current)}
             >
               <PlusCircle fill='transparent' style={{ position: "relative" }} />
               <span>Top Picks</span>
-            </button>
+            </button> */}
           </div>
         </>
       )}

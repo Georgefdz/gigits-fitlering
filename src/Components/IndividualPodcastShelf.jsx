@@ -61,7 +61,7 @@ function IndividualPodcastShelf({ podcasts }) {
         <Modal
           description={selectedPodcast.description}
           spotifyUrl={selectedPodcast.spotifyUrl}
-          closeModal={closeModal}
+          onClose={closeModal}
         />
       )}
     </>

@@ -519,11 +519,12 @@ label > select {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    width: 100vw;
   }
 
   .grid-divider-two {
     overflow-y: auto;
-    max-height: 73vh;
+    max-height: 80vh;
   }
 
   .bookshelf-container {

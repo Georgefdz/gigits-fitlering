@@ -170,6 +170,16 @@ function Podcasts() {
         <>
           <div className='body-container'>
             <div className='grid-divider-two'>
+              <button
+                className='top-picks-button'
+                onClick={() => setShowTopPicks((current) => !current)}
+              >
+                <PlusCircle
+                  fill='transparent'
+                  style={{ position: "relative" }}
+                />
+                <span>Top Picks</span>
+              </button>
               {showTopPicks && (
                 <Modal
                   title='Top Picks'
@@ -180,13 +190,6 @@ function Podcasts() {
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualPodcastShelf podcasts={filteredRecords} />
             </div>
-            <button
-              className='top-picks-button'
-              onClick={() => setShowTopPicks((current) => !current)}
-            >
-              <PlusCircle fill='transparent' style={{ position: "relative" }} />
-              <span>Top Picks</span>
-            </button>
           </div>
           <div className='space'></div>
           <Drawer className='drawer'>

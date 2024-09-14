@@ -1,10 +1,28 @@
 import React from "react";
 import SpotifyPlayer from "./SpotifyPlayer.jsx";
 
-function Modal({ title, author, topPicks, oneLiner, description, spotifyUrl }) {
+function Modal({
+  title,
+  author,
+  topPicks,
+  oneLiner,
+  description,
+  spotifyUrl,
+  onClose,
+}) {
+  const handleBackgroundClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleModalClick = (e) => {
+    e.stopPropagation(); // Prevents the click from propagating to the background
+  };
+
   return (
-    <div className='modal-container'>
-      <div className='modal'>
+    <div className='modal-container' onClick={handleBackgroundClick}>
+      <div className='modal' onClick={handleModalClick}>
         {description && (
           <>
             <SpotifyPlayer url={spotifyUrl} />

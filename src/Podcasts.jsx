@@ -197,7 +197,13 @@ function Podcasts() {
               component='Podcasts'
             />
             <div className='grid-divider-two'>
-              {showTopPicks && <Modal title='Top Picks' topPicks={TopPicks} />}
+              {showTopPicks && (
+                <Modal
+                  title='Top Picks'
+                  topPicks={TopPicks}
+                  onClose={() => setShowTopPicks(false)}
+                />
+              )}
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualPodcastShelf podcasts={filteredRecords} />
             </div>

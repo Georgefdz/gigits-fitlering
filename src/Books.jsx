@@ -191,7 +191,13 @@ function Books() {
             />
 
             <div className='grid-divider-two'>
-              {showTopPicks && <Modal title='Top Picks' topPicks={TopPicks} />}
+              {showTopPicks && (
+                <Modal
+                  title='Top Picks'
+                  topPicks={TopPicks}
+                  onClose={() => setShowTopPicks(false)}
+                />
+              )}
               {/* Pass filteredRecords to IndividualBookShelf */}
               <IndividualBookShelf books={filteredRecords} />
             </div>

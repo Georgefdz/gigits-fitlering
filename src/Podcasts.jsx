@@ -188,6 +188,7 @@ function Podcasts() {
               <span>Top Picks</span>
             </button>
           </div>
+          <div className='space'></div>
           <Drawer className='drawer'>
             <Accordion2
               filters={filters}

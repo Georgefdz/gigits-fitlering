@@ -25,7 +25,7 @@ function Accordion2({
           Skill not taught in School
         </AccordionSummary>
         <AccordionDetails
-          sx={{ backgroundColor: "#f4f4f4", marginTop: "-30px" }}
+          sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
         >
           <CheckboxGroup
             options={uniqueSkills}
@@ -45,7 +45,7 @@ function Accordion2({
           Key Concept
         </AccordionSummary>
         <AccordionDetails
-          sx={{ backgroundColor: "#f4f4f4", marginTop: "-30px" }}
+          sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
         >
           <CheckboxGroup
             options={uniqueConcepts}
@@ -66,7 +66,7 @@ function Accordion2({
             Time to Finish
           </AccordionSummary>
           <AccordionDetails
-            sx={{ backgroundColor: "#f4f4f4", marginTop: "-30px" }}
+            sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
           >
             <CheckboxGroup
               options={uniqueTimes}
@@ -77,7 +77,7 @@ function Accordion2({
           </AccordionDetails>
         </Accordion>
       )}
-      <Accordion defaultExpanded>
+      <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls='panel4-content'
@@ -87,7 +87,7 @@ function Accordion2({
           Type
         </AccordionSummary>
         <AccordionDetails
-          sx={{ backgroundColor: "#f4f4f4", marginTop: "-30px" }}
+          sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
         >
           <CheckboxGroup
             options={uniqueTypes}

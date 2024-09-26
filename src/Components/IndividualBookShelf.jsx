@@ -54,7 +54,7 @@ const IndividualBookShelf = ({ books }) => {
           ))}
 
           {/* Add a shelf image at the bottom if books don't perfectly fill the last row */}
-          {books.length % 50 !== 0 && (
+          {books.length % 30 !== 0 && (
             <img src={shelf} alt='shelf' className='shelf-image2' />
           )}
         </div>
@@ -73,14 +73,14 @@ const IndividualBookShelf = ({ books }) => {
               </div>
 
               {/* Insert the shelf image after every 30 books */}
-              {(index + 1) % 50 === 0 && (
+              {(index + 1) % (width < 950 ? 25 : 30) === 0 && (
                 <img src={shelf} alt='shelf' className='shelf-image2' />
               )}
             </React.Fragment>
           ))}
 
           {/* Add a shelf image at the bottom if books don't perfectly fill the last row */}
-          {books.length % 50 !== 0 && (
+          {books.length % 30 !== 0 && (
             <img src={shelf} alt='shelf' className='shelf-image2' />
           )}
         </div>

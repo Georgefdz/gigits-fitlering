@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
-import Airtable from "airtable";
 import Header from "./Components/Header.jsx";
+import Airtable from "airtable";
 import FilterComponent from "./Components/FilterComponent";
 import TopPicks from "./Components/TopPicks.jsx";
 import IndividualPodcastShelf from "./Components/IndividualPodcastShelf.jsx";

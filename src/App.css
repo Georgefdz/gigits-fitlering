@@ -11,15 +11,6 @@ body {
 }
 
 /* Header Styles */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 165px;
-  background-color: var(--main-bg-color);
-  color: white;
-  filter: drop-shadow(0px 2px 12px rgb(107, 107, 107));
-}
 
 .icon {
   position: absolute;
@@ -27,40 +18,9 @@ body {
   color: var(--main-green-color);
 }
 
-.left-side {
-  display: flex;
-  cursor: pointer;
-}
-
 .plus-circle-container {
   display: flex;
   justify-content: center;
-}
-
-.title-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-left: 20px;
-  margin-left: 20px;
-  border-left: 1px solid white;
-  transform: scale(0.8);
-}
-
-.title-container > h2 {
-  font-size: 5.5rem;
-  font-weight: 400;
-}
-
-.title-container > h2 > span {
-  color: var(--main-green-color);
-}
-
-.title-container > h3 {
-  font-size: 2.5rem;
-  font-weight: 300;
-  align-self: flex-start;
 }
 
 .link-container {
@@ -74,21 +34,6 @@ body {
   color: white;
   padding: 10px;
   font-size: 2rem;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  transition: transform 2s;
-}
-
-.logo-container:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-}
-
-.logo-container > img {
-  max-width: 220px;
 }
 
 .signin-container {
@@ -482,26 +427,6 @@ label > select {
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .header-container {
-    min-height: 80px;
-  }
-
-  .title-container {
-    height: fit-content;
-  }
-
-  .title-container > h2 {
-    font-size: 2rem;
-  }
-
-  .title-container > h3 {
-    font-size: 1rem;
-  }
-
-  .logo-container > img {
-    width: 100px;
-  }
-
   .body-container {
     padding: 0;
     overflow-y: auto;

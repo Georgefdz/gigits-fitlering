@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../logo.png";
 import PlusCircle from "./PlusCircle.jsx";
 import { useNavigate } from "react-router-dom";
+import styles from "./header.module.css";
 
 function Header() {
   const navigate = useNavigate();
@@ -10,22 +11,21 @@ function Header() {
   }
 
   function handleHomeRoute() {
-    navigate("/");
+    navigate("/mobile");
   }
 
   return (
-    <div className='header-container'>
-      <div className='left-side' onClick={handleHomeRoute}>
-        <div className='title-container'>
-          <PlusCircle fill='transparent' />
+    <div className={styles.headerContainer}>
+      <div className={styles.leftSide} onClick={handleHomeRoute}>
+        <div className={styles.titleContainer}>
+          {/* <PlusCircle fill='transparent' /> */}
           <h2>
             The <span>School</span> of Life
           </h2>
           <h3>real-world knowledge</h3>
         </div>
       </div>
-      <div className='logo-container' onClick={handleGigitsRoute}>
-        <span>back to</span>
+      <div className={styles.logoContainer} onClick={handleGigitsRoute}>
         <img src={logo} alt='logo' />
       </div>
     </div>

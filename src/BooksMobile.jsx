@@ -164,7 +164,11 @@ function BooksMobile() {
             )} */}
             <Buk uniqueSkills={uniqueSkills} records={filteredRecords} />
           </div>
-          <Drawer className='drawer' clicked={clicked}>
+          <Drawer
+            className='drawer'
+            clicked={clicked}
+            drawerText={"Swipe to filter your book preferences"}
+          >
             <Accordion2
               filters={filters}
               handleFilterChange={handleFilterChange}

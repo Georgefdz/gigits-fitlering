@@ -43,7 +43,7 @@ const Puller = styled("div")(({ theme }) => ({
   }),
 }));
 
-function Drawer2({ children, clicked, ...props }) {
+function Drawer2({ children, drawerText, clicked, ...props }) {
   const { window } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -120,7 +120,8 @@ function Drawer2({ children, clicked, ...props }) {
               }}
             />{" "}
             Filter */}
-            Swipe to filter your podcast preferences
+
+            {drawerText}
           </Typography>
         </StyledBox>
         <StyledBox

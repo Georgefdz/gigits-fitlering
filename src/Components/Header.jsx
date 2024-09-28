@@ -11,7 +11,7 @@ function Header() {
   }
 
   function handleHomeRoute() {
-    navigate("/mobile");
+    navigate("/");
   }
 
   return (

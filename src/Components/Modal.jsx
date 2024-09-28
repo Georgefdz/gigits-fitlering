@@ -80,13 +80,19 @@ function Modal({
             <PlusCircle width='25' height='25' />
             <p>gigit</p> <span>your learning time</span>
           </div>
-          {topPicks && (
-            <>
-              <h2>Top Picks: </h2>
-              {topPicks()}
-            </>
-          )}
         </div>
+      )}
+      {topPicks && (
+        <>
+          <div
+            className={styles.modal}
+            ref={modalRef}
+            onClick={handleModalClick}
+          >
+            <h2>Top Picks: </h2>
+            {topPicks()}
+          </div>
+        </>
       )}
     </div>,
     document.body // This renders the modal outside of the current DOM hierarchy

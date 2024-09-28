@@ -293,7 +293,11 @@ function PodcastsMobile() {
               </div>
             </div>
           </div>
-          <Drawer className='drawer' clicked={clicked}>
+          <Drawer
+            className='drawer'
+            clicked={clicked}
+            drawerText={"Swipe to filter your podcast preferences"}
+          >
             <Accordion2
               filters={filters}
               handleFilterChange={handleFilterChange}

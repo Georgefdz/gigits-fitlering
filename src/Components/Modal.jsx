@@ -15,6 +15,7 @@ function Modal({
   link,
   onClose,
 }) {
+  console.log("Modal spotifyUrl:", spotifyUrl);
   const modalRef = useRef(null);
 
   // Hook to handle clicks/touches outside the modal

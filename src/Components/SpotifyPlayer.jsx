@@ -1,4 +1,5 @@
 const SpotifyPlayer = ({ url }) => {
+  console.log("SpotifyPlayer URL:", url);
   // console.log("Rendering Spotify Player with URL:", url);
   return (
     <div className='spotify-container'>

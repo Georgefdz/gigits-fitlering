@@ -3,14 +3,13 @@ import mic from "/mic2.png";
 import woodenshelf from "/woodenshelfV2.png";
 import Arrow from "/arrow.svg";
 import styles from "./pods.module.css";
-import Modal from "./Modal";
+// Removed internal Modal import
 import { useWindowSize } from "@uidotdev/usehooks";
 
-function Pods({ uniqueSkills, records, selectedTimes }) {
-  // State to keep track of the current index for each skill
+function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
+  // Receive the setter
+  // Remove internal selectedPodcast state
   const [currentIndices, setCurrentIndices] = useState({});
-  const [selectedPodcast, setSelectedPodcast] = useState(null);
-
   const { width } = useWindowSize();
 
   let numberDisplayed;
@@ -34,11 +33,7 @@ function Pods({ uniqueSkills, records, selectedTimes }) {
 
   const handlePodcastClick = (podcast) => {
     const spotifyUrl = convertToEmbedUrl(podcast.spotifyUrl);
-    setSelectedPodcast({ ...podcast, spotifyUrl }); // Set the selected podcast when a podcast is clicked
-  };
-
-  const closeModal = () => {
-    setSelectedPodcast(null); // Reset the selected podcast to close the modal
+    setSelectedPodcast({ ...podcast, spotifyUrl }); // Use the setter from props
   };
 
   const convertToEmbedUrl = (url) => {
@@ -109,7 +104,7 @@ function Pods({ uniqueSkills, records, selectedTimes }) {
                     src={mic}
                     alt=''
                     className={micStyle}
-                    onClick={() => handlePodcastClick(podcast)}
+                    onClick={() => handlePodcastClick(podcast)} // Open modal on click
                   />
                 );
               })}
@@ -118,7 +113,13 @@ function Pods({ uniqueSkills, records, selectedTimes }) {
                   src={Arrow}
                   alt='More podcasts'
                   className={styles.arrowIcon}
-                  onClick={() => handleArrowClick(skill, skillRecords.length)}
+                  onClick={() =>
+                    handleArrowClick(
+                      skill,
+                      skillRecords.length,
+                      numberDisplayed
+                    )
+                  } // Pass numberDisplayed
                   style={{ cursor: "pointer" }}
                 />
               )}
@@ -130,14 +131,7 @@ function Pods({ uniqueSkills, records, selectedTimes }) {
           </div>
         );
       })}
-
-      {selectedPodcast && (
-        <Modal
-          description={selectedPodcast.description}
-          spotifyUrl={selectedPodcast.spotifyUrl}
-          onClose={closeModal}
-        />
-      )}
+      {/* Removed internal Modal */}
     </>
   );
 }

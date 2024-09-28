@@ -28,6 +28,7 @@ function PodcastsMobile() {
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [clicked, setClicked] = useState(false);
+  const [selectedPodcast, setSelectedPodcast] = useState(null); // New state
 
   const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -184,6 +185,14 @@ function PodcastsMobile() {
     }),
   };
 
+  const suggestRandomPodcast = () => {
+    if (filteredRecords.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * filteredRecords.length);
+    const randomPodcast = filteredRecords[randomIndex];
+    console.log("Random Podcast selected:", randomPodcast);
+    setSelectedPodcast(randomPodcast);
+  };
+
   return (
     <>
       <Header />
@@ -216,6 +225,7 @@ function PodcastsMobile() {
                   uniqueSkills={uniqueSkills}
                   records={filteredRecords}
                   selectedTimes={selectedTimes}
+                  setSelectedPodcast={setSelectedPodcast} // Pass the setter
                 />
               </div>
             </div>
@@ -247,12 +257,25 @@ function PodcastsMobile() {
                 >
                   Top Picks
                 </button>
-                <button className={styles.button} onClick={() => closeDrawer()}>
-                  Suggest a random book
+                <button
+                  className={styles.button}
+                  onClick={() => {
+                    closeDrawer();
+                    suggestRandomPodcast(); // Suggest random podcast
+                  }}
+                >
+                  Suggest a random podcast
                 </button>
               </div>
             </div>
           </div>
+          {selectedPodcast && (
+            <Modal
+              description={selectedPodcast.description}
+              spotifyUrl={selectedPodcast.spotifyUrl}
+              onClose={() => setSelectedPodcast(null)}
+            />
+          )}
         </>
       ) : (
         <>
@@ -270,6 +293,7 @@ function PodcastsMobile() {
                   uniqueSkills={uniqueSkills}
                   records={filteredRecords}
                   selectedTimes={selectedTimes}
+                  setSelectedPodcast={setSelectedPodcast} // Pass the setter
                 />
               </div>
             </div>
@@ -314,11 +338,24 @@ function PodcastsMobile() {
               >
                 Top Picks
               </button>
-              <button className={styles.button} onClick={() => closeDrawer()}>
-                Suggest a random book
+              <button
+                className={styles.button}
+                onClick={() => {
+                  closeDrawer();
+                  suggestRandomPodcast(); // Suggest random podcast
+                }}
+              >
+                Suggest a random podcast
               </button>
             </div>
           </Drawer>
+          {selectedPodcast && (
+            <Modal
+              description={selectedPodcast.description}
+              spotifyUrl={selectedPodcast.spotifyUrl}
+              onClose={() => setSelectedPodcast(null)}
+            />
+          )}
         </>
       )}
     </>

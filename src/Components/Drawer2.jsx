@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
@@ -42,9 +43,15 @@ const Puller = styled("div")(({ theme }) => ({
   }),
 }));
 
-function Drawer2({ children, ...props }) {
+function Drawer2({ children, clicked, ...props }) {
   const { window } = props;
   const [open, setOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (clicked) {
+      setOpen(false);
+    }
+  }, [clicked]);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -59,7 +66,7 @@ function Drawer2({ children, ...props }) {
       <Global
         styles={{
           ".MuiDrawer-root > .MuiPaper-root": {
-            height: `calc(50% - ${drawerBleeding}px)`,
+            height: `calc(75% - ${drawerBleeding}px)`,
             overflow: "visible",
           },
           ".MuiDrawer-root": {},
@@ -89,20 +96,22 @@ function Drawer2({ children, ...props }) {
             visibility: "visible",
             right: 0,
             left: 0,
-            borderTop: ".5px solid grey",
+            borderTop: ".5px solid #76b39d",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <Puller />
           <Typography
             sx={{
               p: 2,
-              color: "#76b39d",
+              pt: 3,
+              color: "white",
               fontWeight: "bold",
               display: "flex",
-              alignItems: "center",
             }}
           >
-            <FilterAltIcon
+            {/* <FilterAltIcon
               sx={{
                 fontSize: 28,
                 fill: "none",
@@ -110,10 +119,21 @@ function Drawer2({ children, ...props }) {
                 strokeWidth: 2,
               }}
             />{" "}
-            Filter
+            Filter */}
+            Swipe to filter your podcast preferences
           </Typography>
         </StyledBox>
-        <StyledBox sx={{ px: 2, pb: 2, height: "100%", overflow: "auto" }}>
+        <StyledBox
+          sx={{
+            px: 2,
+            pb: 4,
+            height: "100%",
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
           {children}
         </StyledBox>
       </SwipeableDrawer>

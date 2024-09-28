@@ -23,7 +23,7 @@ function CheckboxGroup({ options, selectedOptions, onChange, name }) {
 
   return (
     <FormControl component='fieldset'>
-      <FormGroup>
+      <FormGroup className='formGroup'>
         {options.map((option) => (
           <FormControlLabel
             key={option}

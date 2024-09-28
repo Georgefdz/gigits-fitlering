@@ -86,8 +86,8 @@ function Mobile() {
         >
           <img src={library} alt='' />
           {libraryHovered && (
-            <Link to='/books'>
-              <button>Book</button>
+            <Link to='/booksmobile'>
+              <button className={styles.button}>Book</button>
             </Link>
           )}
         </div>
@@ -99,13 +99,13 @@ function Mobile() {
           <img src={studio} alt='' />
           {studioHovered && (
             <Link to='/podcastsmobile'>
-              <button>Podcast</button>
+              <button className={styles.button}>Podcast</button>
             </Link>
           )}
         </div>
         <h2 className={styles.secondText}>
-          Let us suggest a <span>book or podcast</span> tailored to your
-          preferences
+          Let us suggest a <span className='span'>book or podcast</span>{" "}
+          tailored to your preferences
         </h2>
       </div>
     </>

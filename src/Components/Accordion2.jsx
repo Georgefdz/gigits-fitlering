@@ -5,6 +5,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckboxGroup from "./CheckboxGroup";
 
+const matchh = ["at least 1 selected criteria", "all selected criteria"];
+
 function Accordion2({
   filters,
   handleFilterChange,
@@ -15,12 +17,23 @@ function Accordion2({
 }) {
   return (
     <div style={{ paddingTop: "20px" }}>
+      {/* <span>Show items that match: </span>
+      <CheckboxGroup
+        options={matchh}
+        selectedOptions={matchh[0]}
+        name='matchh'
+        className={"formGroup"}
+      /> */}
+
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls='panel1-content'
           id='panel1-header'
-          sx={{ backgroundColor: "#f4f4f4", borderRadius: "10px" }}
+          sx={{
+            backgroundColor: "#f4f4f4",
+            borderRadius: "10px",
+          }}
         >
           Skill not taught in School
         </AccordionSummary>
@@ -77,26 +90,28 @@ function Accordion2({
           </AccordionDetails>
         </Accordion>
       )}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel4-content'
-          id='panel4-header'
-          sx={{ backgroundColor: "#f4f4f4", borderRadius: "10px" }}
-        >
-          Type
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
-        >
-          <CheckboxGroup
-            options={uniqueTypes}
-            selectedOptions={filters.type}
-            onChange={handleFilterChange}
-            name='type'
-          />
-        </AccordionDetails>
-      </Accordion>
+      {uniqueTypes && (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls='panel4-content'
+            id='panel4-header'
+            sx={{ backgroundColor: "#f4f4f4", borderRadius: "10px" }}
+          >
+            Type
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
+          >
+            <CheckboxGroup
+              options={uniqueTypes}
+              selectedOptions={filters.type}
+              onChange={handleFilterChange}
+              name='type'
+            />
+          </AccordionDetails>
+        </Accordion>
+      )}
     </div>
   );
 }

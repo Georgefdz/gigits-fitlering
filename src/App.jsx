@@ -5,6 +5,7 @@ import Podcasts from "./Podcasts.jsx";
 import Mobile from "./Mobile.jsx";
 import "./App.css";
 import PodcastsMobile from "./PodcastsMobile.jsx";
+import BooksMobile from "./BooksMobile.jsx";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path='/podcasts' element={<Podcasts />} />
           <Route path='/mobile' element={<Mobile />} />
           <Route path='/podcastsmobile' element={<PodcastsMobile />} />
+          <Route path='/booksmobile' element={<BooksMobile />} />
         </Routes>
       </Router>
     </>

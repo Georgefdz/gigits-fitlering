@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import SpotifyPlayer from "./SpotifyPlayer.jsx";
+import PlusCircle from "./PlusCircle.jsx";
+import styles from "./modal.module.css";
 
 function Modal({
   title,
@@ -9,6 +11,8 @@ function Modal({
   oneLiner,
   description,
   spotifyUrl,
+  cover,
+  link,
   onClose,
 }) {
   const modalRef = useRef(null);
@@ -37,23 +41,53 @@ function Modal({
   };
 
   return ReactDOM.createPortal(
-    <div className='modal-container'>
-      <div className='modal' ref={modalRef} onClick={handleModalClick}>
-        {description && (
-          <>
-            <SpotifyPlayer url={spotifyUrl} />
-            <h3>{description}</h3>
-          </>
-        )}
-        {author && <h2>Author: {author}</h2>}
-        {oneLiner && <h2>{oneLiner}</h2>}
-        {topPicks && (
-          <>
-            <h2>Top Picks: </h2>
-            {topPicks()}
-          </>
-        )}
-      </div>
+    <div className={styles.modalContainer}>
+      {description && (
+        <div className={styles.modal} ref={modalRef} onClick={handleModalClick}>
+          <SpotifyPlayer url={spotifyUrl} />
+          <h3>{description}</h3>
+          <div className={styles.bottomSpan}>
+            <PlusCircle width='25' height='25' />
+            <p>gigit</p> <span>your learning time</span>
+          </div>
+          {topPicks && (
+            <>
+              <h2>Top Picks: </h2>
+              {topPicks()}
+            </>
+          )}
+        </div>
+      )}
+      {author && (
+        <div
+          className={styles.modalBook}
+          ref={modalRef}
+          onClick={handleModalClick}
+        >
+          <div className={styles.leftSide}>
+            <div className={styles.imageContainer}>
+              <img src={cover} alt='' />
+            </div>
+          </div>
+          <div className={styles.rightSide}>
+            <a href={link} target='_blank' rel='noopener noreferrer'>
+              <button>Find book</button>
+            </a>
+            <h2>Author: {author}</h2>
+            <h3>{oneLiner}</h3>
+          </div>
+          <div className={styles.bottomSpan}>
+            <PlusCircle width='25' height='25' />
+            <p>gigit</p> <span>your learning time</span>
+          </div>
+          {topPicks && (
+            <>
+              <h2>Top Picks: </h2>
+              {topPicks()}
+            </>
+          )}
+        </div>
+      )}
     </div>,
     document.body // This renders the modal outside of the current DOM hierarchy
   );

@@ -24,7 +24,7 @@
   border-radius: 12px;
 }
 
-button {
+.button {
   width: 160px;
   height: 50px;
   background-color: #76b39d;
@@ -48,7 +48,7 @@ button {
   color: #76b39d;
 }
 
-span {
+.span {
   color: white;
 }
 

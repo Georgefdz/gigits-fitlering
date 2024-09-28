@@ -9,6 +9,7 @@ const FilterComponent = ({
   uniqueConcepts,
   uniqueTypes,
   uniqueTimes,
+  uniqueLanguages,
   customStyles,
   component,
 }) => {
@@ -53,7 +54,7 @@ const FilterComponent = ({
             classNamePrefix='react-select'
           />
         </label>
-        <label>
+        {/* <label>
           Type:
           <Select
             name='type'
@@ -71,7 +72,7 @@ const FilterComponent = ({
             className='react-select-container'
             classNamePrefix='react-select'
           />
-        </label>
+        </label> */}
       </div>
     );
   }
@@ -117,6 +118,25 @@ const FilterComponent = ({
           />
         </label>
         <label>
+          Language:
+          <Select
+            name='language'
+            options={uniqueLanguages.map((language) => ({
+              value: language,
+              label: language.charAt(0).toUpperCase() + language.slice(1),
+            }))}
+            onChange={handleFilterChange}
+            isMulti
+            value={filters.language.map((language) => ({
+              value: language,
+              label: language.charAt(0).toUpperCase() + language.slice(1),
+            }))}
+            styles={customStyles}
+            className='react-select-container'
+            classNamePrefix='react-select'
+          />
+        </label>
+        {/* <label>
           Time to Finish:
           <Select
             name='time'
@@ -134,8 +154,8 @@ const FilterComponent = ({
             className='react-select-container'
             classNamePrefix='react-select'
           />
-        </label>
-        <label>
+        </label> */}
+        {/* <label>
           Type:
           <Select
             name='type'
@@ -153,7 +173,7 @@ const FilterComponent = ({
             className='react-select-container'
             classNamePrefix='react-select'
           />
-        </label>
+        </label> */}
       </div>
     );
   }

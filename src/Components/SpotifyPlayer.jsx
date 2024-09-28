@@ -1,14 +1,12 @@
-import React from "react";
-
 const SpotifyPlayer = ({ url }) => {
-  console.log("Rendering Spotify Player with URL:", url);
+  // console.log("Rendering Spotify Player with URL:", url);
   return (
     <div className='spotify-container'>
       <iframe
         style={{
           borderRadius: "12px",
           justifyContent: "center",
-          width: "90%",
+          width: "100%",
           height: "152px",
         }}
         src={url}

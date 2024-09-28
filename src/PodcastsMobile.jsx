@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import Header from "./Components/Header";
-import styles from "./podcastsmobile.module.css";
-import woodenshelf from "/woodenshelfV2.png";
-import mic from "/mic2.png";
 import Airtable from "airtable";
+import Drawer from "./Components/Drawer2.jsx";
+import Accordion2 from "./Components/Accordion2.jsx";
+import TopPicks from "./Components/TopPicks.jsx";
+import { useWindowSize } from "@uidotdev/usehooks";
+import Modal from "./Components/Modal.jsx";
+import FilterComponent from "./Components/FilterComponent.jsx";
+import mic from "/mic2.png";
+import Pods from "./Components/Pods.jsx";
+import styles from "./podcastsmobile.module.css";
 
 function PodcastsMobile() {
   const [records, setRecords] = useState([]);
@@ -12,16 +18,20 @@ function PodcastsMobile() {
   const [filters, setFilters] = useState({
     skill: [],
     concept: [],
-    time: [],
-    type: [],
+    language: [],
   });
   const [uniqueSkills, setUniqueSkills] = useState([]);
   const [uniqueConcepts, setUniqueConcepts] = useState([]);
   const [uniqueTypes, setUniqueTypes] = useState([]);
   const [uniqueTimes, setUniqueTimes] = useState([]);
+  const [uniqueLanguages, setUniqueLanguages] = useState([]);
   const [showTopPicks, setShowTopPicks] = useState(false);
+  const [selectedTimes, setSelectedTimes] = useState([]);
+  const [clicked, setClicked] = useState(false);
 
   const API_KEY = import.meta.env.VITE_API_KEY;
+
+  const { width } = useWindowSize();
 
   useEffect(() => {
     const base = new Airtable({ apiKey: API_KEY }).base("appz3L59vDo6XArUw");
@@ -45,6 +55,7 @@ function PodcastsMobile() {
               description: fields["Description"] || "",
               spotifyUrl: fields["Link to Reco"] || "",
               topScore: fields["Top"] || 0,
+              language: fields.Language || [],
             };
           });
 
@@ -53,11 +64,11 @@ function PodcastsMobile() {
 
           // Filter the top 10 podcasts based on the "Top" field
           const topPodcasts = formattedRecords
-            .filter((record) => record.topScore && !isNaN(record.topScore)) // Ensure valid top scores
-            .sort((a, b) => a.topScore - b.topScore) // Sort by "Top" field value
-            .slice(0, 10); // Get the top 10 podcasts
+            .filter((record) => record.topScore && !isNaN(record.topScore))
+            .sort((a, b) => b.topScore - a.topScore) // Higher score first
+            .slice(0, 10);
 
-          setTopPicks(topPodcasts); // Set top picks for display in the modal
+          setTopPicks(topPodcasts);
 
           // Extract unique values for each filter field
           const extractUniqueValues = (records, field) => {
@@ -77,6 +88,7 @@ function PodcastsMobile() {
           setUniqueConcepts(extractUniqueValues(formattedRecords, "concept"));
           setUniqueTypes(extractUniqueValues(formattedRecords, "type"));
           setUniqueTimes(extractUniqueValues(formattedRecords, "time"));
+          setUniqueLanguages(extractUniqueValues(formattedRecords, "language"));
 
           fetchNextPage();
         },
@@ -88,85 +100,225 @@ function PodcastsMobile() {
       );
   }, []);
 
-  // console.log(uniqueSkills);
-  console.log(records);
+  const handleFilterChange = (selectedOptions, { name }) => {
+    let selectedValues = [];
+    if (Array.isArray(selectedOptions)) {
+      if (typeof selectedOptions[0] === "string") {
+        // From mobile (CheckboxGroup)
+        selectedValues = selectedOptions;
+      } else {
+        // From desktop (React Select)
+        selectedValues = selectedOptions.map((option) => option.value);
+      }
+    }
+
+    setFilters({
+      ...filters,
+      [name]: selectedValues,
+    });
+  };
+
+  useEffect(() => {
+    const filtered = records.filter((record) => {
+      const matchesArray = (array, filter) =>
+        filter.length === 0 ||
+        array.some((value) => filter.includes(value.trim().toLowerCase()));
+
+      return (
+        matchesArray(record.skill, filters.skill) &&
+        matchesArray(record.concept, filters.concept) &&
+        matchesArray(record.language, filters.language)
+      );
+    });
+
+    setFilteredRecords(filtered);
+  }, [filters, records]);
+
+  const closeDrawer = () => {
+    setClicked(true);
+  };
+
+  useEffect(() => {
+    return () => {
+      setClicked(false);
+    };
+  }, [closeDrawer]);
+
+  const timeOptions = [
+    { label: "< 30 mins", style: styles.micOne, display: "< 30\nmins" },
+    { label: "31-45 mins", style: styles.micTwo, display: "31-45\nmins" },
+    { label: "45-60 mins", style: styles.micThree, display: "45-60\nmins" },
+    { label: "1-2 hours", style: styles.micFour, display: "1-2\nhours" },
+    { label: "2-3 hours", style: styles.micFive, display: "2-3\nhours" },
+    { label: "+3 hours", style: styles.micSix, display: ">3\nhours" },
+  ];
+
+  const handleTimeClick = (timeLabel) => {
+    setSelectedTimes((prevSelectedTimes) => {
+      if (prevSelectedTimes.includes(timeLabel)) {
+        return prevSelectedTimes.filter((time) => time !== timeLabel);
+      } else {
+        return [...prevSelectedTimes, timeLabel];
+      }
+    });
+  };
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: "transparent",
+      border: "2px solid rgb(6, 144, 103)",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent", // Transparent background
+      color: state.isSelected ? "rgb(6, 144, 103)" : "white", // Change color on selection
+      ":hover": {
+        backgroundColor: "rgb(6, 144, 103)", // Hover effect
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: "transparent", // Background color for the dropdown menu
+      border: "2px solid rgb(6, 144, 103)", // Border for the dropdown menu
+    }),
+  };
 
   return (
     <>
       <Header />
-      <div className={styles.background}>
-        <div className={styles.podContainer}>
-          <Pods />
-        </div>
-      </div>
-      <div className={styles.timeContainer}>
-        <h3>Time available:</h3>
-        <div className={styles.podcastsGrid}>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micOne} />
-            <span>
-              {"< 30 "} <br />
-              mins
-            </span>
+      {width > 768 ? (
+        <>
+          <div className={styles.filterComponentsContainer}>
+            <FilterComponent
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              uniqueSkills={uniqueSkills}
+              uniqueConcepts={uniqueConcepts}
+              uniqueTypes={uniqueTypes}
+              uniqueTimes={uniqueTimes}
+              customStyles={customStyles}
+              uniqueLanguages={uniqueLanguages}
+              component='Podcasts'
+            />
           </div>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micTwo} />
-            <span>
-              {"31-45 "} <br />
-              mins
-            </span>
+          <div className={styles.bodyContainer}>
+            <div className={styles.background}>
+              <div className={styles.podContainer}>
+                {showTopPicks && (
+                  <Modal
+                    title='Top Picks'
+                    topPicks={() => <TopPicks topList={topPicks} />}
+                    onClose={() => setShowTopPicks(false)}
+                  />
+                )}
+                <Pods
+                  uniqueSkills={uniqueSkills}
+                  records={filteredRecords}
+                  selectedTimes={selectedTimes}
+                />
+              </div>
+            </div>
+            <div className={styles.timeContainer}>
+              <h3>Time available:</h3>
+              <div className={styles.podcastsGrid}>
+                {timeOptions.map((timeOption) => (
+                  <div
+                    key={timeOption.label}
+                    className={`${styles.timeSpan} ${
+                      selectedTimes.includes(timeOption.label)
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() => handleTimeClick(timeOption.label)}
+                  >
+                    <img src={mic} alt='' className={timeOption.style} />
+                    <span>{timeOption.display}</span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.button}
+                  onClick={() => {
+                    closeDrawer();
+                    setShowTopPicks(true);
+                  }}
+                >
+                  Top Picks
+                </button>
+                <button className={styles.button} onClick={() => closeDrawer()}>
+                  Suggest a random book
+                </button>
+              </div>
+            </div>
           </div>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micThree} />
-            <span>
-              {"45-60 "} <br />
-              mins
-            </span>
+        </>
+      ) : (
+        <>
+          <div className={styles.bodyContainer}>
+            <div className={styles.background}>
+              <div className={styles.podContainer}>
+                {showTopPicks && (
+                  <Modal
+                    title='Top Picks'
+                    topPicks={() => <TopPicks topList={topPicks} />}
+                    onClose={() => setShowTopPicks(false)}
+                  />
+                )}
+                <Pods
+                  uniqueSkills={uniqueSkills}
+                  records={filteredRecords}
+                  selectedTimes={selectedTimes}
+                />
+              </div>
+            </div>
+            <div className={styles.timeContainer}>
+              <h3>Time available:</h3>
+              <div className={styles.podcastsGrid}>
+                {timeOptions.map((timeOption) => (
+                  <div
+                    key={timeOption.label}
+                    className={`${styles.timeSpan} ${
+                      selectedTimes.includes(timeOption.label)
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() => handleTimeClick(timeOption.label)}
+                  >
+                    <img src={mic} alt='' className={timeOption.style} />
+                    <span>{timeOption.display}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micFour} />
-            <span>
-              {"1-2 "} <br />
-              hours
-            </span>
-          </div>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micFive} />
-            <span>
-              {"2-3 "} <br />
-              hours
-            </span>
-          </div>
-          <div className={styles.timeSpan}>
-            <img src={mic} alt='' className={styles.micSix} />
-            <span>
-              {">3 "}
-              <br />
-              hours
-            </span>
-          </div>
-        </div>
-      </div>
+          <Drawer className='drawer' clicked={clicked}>
+            <Accordion2
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              uniqueSkills={uniqueSkills}
+              uniqueConcepts={uniqueConcepts}
+            />
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.button}
+                onClick={() => {
+                  closeDrawer();
+                  setShowTopPicks(true);
+                }}
+              >
+                Top Picks
+              </button>
+              <button className={styles.button} onClick={() => closeDrawer()}>
+                Suggest a random book
+              </button>
+            </div>
+          </Drawer>
+        </>
+      )}
     </>
   );
 }
 
 export default PodcastsMobile;
-
-function Pods() {
-  return (
-    <>
-      <div className={styles.podReel}>
-        <div className={styles.slider}>
-          <img src={mic} alt='' className={styles.micOne} />
-          <img src={mic} alt='' className={styles.micThree} />
-          <img src={mic} alt='' className={styles.micFour} />
-        </div>
-        <div className={styles.woodContainer}>
-          <img src={woodenshelf} alt='' />
-          <span>Time Management & Habit Building</span>
-        </div>
-      </div>
-    </>
-  );
-}

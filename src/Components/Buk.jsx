@@ -21,8 +21,6 @@ function Buk({ uniqueSkills, records }) {
     return bookImages[randomIndex];
   };
 
-  console.log(records);
-
   const filterBooksBySkill = (skill) => {
     const filteredBooks = records.filter((record) =>
       record.skill.some(

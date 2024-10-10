@@ -168,21 +168,41 @@ function PodcastsMobile() {
     control: (provided) => ({
       ...provided,
       backgroundColor: "transparent",
-      border: "2px solid rgb(6, 144, 103)",
+      border: "2px solid #76b39d",
+      borderRadius: "12px",
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent", // Transparent background
       color: state.isSelected ? "rgb(6, 144, 103)" : "white", // Change color on selection
       ":hover": {
-        backgroundColor: "rgb(6, 144, 103)", // Hover effect
+        backgroundColor: "#76b39d", // Hover effect
       },
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: "#76b39d",
+      borderRadius: "4px",
     }),
     menu: (provided) => ({
       ...provided,
       backgroundColor: "transparent", // Background color for the dropdown menu
-      border: "2px solid rgb(6, 144, 103)", // Border for the dropdown menu
+      border: "2px solid #76b39d", // Border for the dropdown menu
     }),
+  };
+
+  const convertToEmbedUrl = (url) => {
+    if (!url) {
+      console.log("No URL provided");
+      return "";
+    }
+    const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1];
+    console.log("Extracted Spotify Episode ID:", episodeId);
+    const embedUrl = episodeId
+      ? `https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator`
+      : "";
+    console.log("Final Embed URL:", embedUrl);
+    return embedUrl;
   };
 
   const suggestRandomPodcast = () => {
@@ -190,7 +210,10 @@ function PodcastsMobile() {
     const randomIndex = Math.floor(Math.random() * filteredRecords.length);
     const randomPodcast = filteredRecords[randomIndex];
     console.log("Random Podcast selected:", randomPodcast);
-    setSelectedPodcast(randomPodcast);
+
+    const embedUrl = convertToEmbedUrl(randomPodcast.spotifyUrl);
+
+    setSelectedPodcast({ ...randomPodcast, spotifyUrl: embedUrl });
   };
 
   return (
@@ -261,7 +284,7 @@ function PodcastsMobile() {
                   className={styles.button}
                   onClick={() => {
                     closeDrawer();
-                    suggestRandomPodcast(); // Suggest random podcast
+                    suggestRandomPodcast();
                   }}
                 >
                   Suggest a random podcast

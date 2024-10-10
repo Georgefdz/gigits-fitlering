@@ -87,6 +87,16 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
           keepMounted: true,
         }}
       >
+        <div className='upperCheckboxes'>
+          <label>
+            <input type='checkbox' name='' id='' />
+            At least 1 selected criteria
+          </label>
+          <label>
+            <input type='checkbox' name='' id='' />
+            All selected criteria
+          </label>
+        </div>
         <StyledBox
           sx={{
             position: "absolute",
@@ -99,6 +109,8 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
             borderTop: ".5px solid #76b39d",
             display: "flex",
             justifyContent: "center",
+            borderRight: ".5px solid #76b39d",
+            borderLeft: ".5px solid #76b39d",
           }}
         >
           <Puller />
@@ -133,6 +145,8 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            borderLeft: ".5px solid #76b39d",
+            borderRight: ".5px solid #76b39d",
           }}
         >
           {children}

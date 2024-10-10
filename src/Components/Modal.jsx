@@ -18,12 +18,11 @@ function Modal({
   console.log("Modal spotifyUrl:", spotifyUrl);
   const modalRef = useRef(null);
 
-  // Hook to handle clicks/touches outside the modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         if (onClose) {
-          onClose(); // Close the modal if clicked outside
+          onClose();
         }
       }
     };
@@ -48,8 +47,14 @@ function Modal({
           <SpotifyPlayer url={spotifyUrl} />
           <h3>{description}</h3>
           <div className={styles.bottomSpan}>
-            <PlusCircle width='25' height='25' />
-            <p>gigit</p> <span>your learning time</span>
+            <a
+              href='https://gigits.io'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <PlusCircle width='25' height='25' />
+              <p>gigit</p> <span>your learning time</span>
+            </a>
           </div>
           {topPicks && (
             <>
@@ -78,8 +83,14 @@ function Modal({
             <h3>{oneLiner}</h3>
           </div>
           <div className={styles.bottomSpan}>
-            <PlusCircle width='25' height='25' />
-            <p>gigit</p> <span>your learning time</span>
+            <a
+              href='https://gigits.io'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <PlusCircle width='25' height='25' />
+              <p>gigit</p> <span>your learning time</span>
+            </a>
           </div>
         </div>
       )}
@@ -96,7 +107,7 @@ function Modal({
         </>
       )}
     </div>,
-    document.body // This renders the modal outside of the current DOM hierarchy
+    document.body
   );
 }
 

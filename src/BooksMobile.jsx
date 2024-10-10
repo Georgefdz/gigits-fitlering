@@ -122,20 +122,26 @@ function BooksMobile() {
     control: (provided) => ({
       ...provided,
       backgroundColor: "transparent",
-      border: "2px solid rgb(6, 144, 103)",
+      border: "2px solid #76b39d",
+      borderRadius: "12px",
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent", // Transparent background
       color: state.isSelected ? "rgb(6, 144, 103)" : "white", // Change color on selection
       ":hover": {
-        backgroundColor: "rgb(6, 144, 103)", // Hover effect
+        backgroundColor: "#76b39d", // Hover effect
       },
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: "#76b39d",
+      borderRadius: "4px",
     }),
     menu: (provided) => ({
       ...provided,
       backgroundColor: "transparent", // Background color for the dropdown menu
-      border: "2px solid rgb(6, 144, 103)", // Border for the dropdown menu
+      border: "2px solid #76b39d", // Border for the dropdown menu
     }),
   };
 

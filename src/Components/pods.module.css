@@ -72,6 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-transform: capitalize;
 }
 
 .arrowIcon {
@@ -83,6 +84,10 @@
 
 .arrowIcon:hover {
   transform: translateX(5px);
+}
+
+.arrowIconLeft {
+  transform: rotate(180deg);
 }
 
 @media (min-width: 768px) {

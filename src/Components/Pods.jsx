@@ -1,7 +1,7 @@
 import { useState } from "react";
 import mic from "/mic2.png";
 import woodenshelf from "/woodenshelfV2.png";
-import Arrow from "/arrow.svg";
+import Arrow from "/arrowRight.png";
 import styles from "./pods.module.css";
 // Removed internal Modal import
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -20,13 +20,23 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
     numberDisplayed = 4;
   }
 
-  const handleArrowClick = (skill, totalCount, numberDisplayed) => {
+  const handleArrowClick = (skill, totalCount, numberDisplayed, direction) => {
     setCurrentIndices((prev) => {
       const currentIndex = prev[skill] || 0;
-      const newIndex =
-        currentIndex + numberDisplayed < totalCount
-          ? currentIndex + numberDisplayed
-          : currentIndex;
+      let newIndex;
+
+      if (direction === "next") {
+        newIndex =
+          currentIndex + numberDisplayed < totalCount
+            ? currentIndex + numberDisplayed
+            : currentIndex;
+      } else if (direction === "prev") {
+        newIndex =
+          currentIndex - numberDisplayed >= 0
+            ? currentIndex - numberDisplayed
+            : 0;
+      }
+
       return { ...prev, [skill]: newIndex };
     });
   };
@@ -84,17 +94,33 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
           return null;
         }
 
-        // Determine the current index for pagination
         const currentIndex = currentIndices[skill] || 0;
         const displayedPodcasts = skillRecords.slice(
           currentIndex,
           currentIndex + numberDisplayed
         );
         const hasMore = skillRecords.length > currentIndex + numberDisplayed;
+        const hasPrevious = currentIndex > 0;
 
         return (
           <div key={skill} className={styles.podReel}>
             <div className={styles.slider}>
+              {hasPrevious && (
+                <img
+                  src={Arrow}
+                  alt='Previous podcasts'
+                  className={`${styles.arrowIcon} ${styles.arrowIconLeft}`}
+                  onClick={() =>
+                    handleArrowClick(
+                      skill,
+                      skillRecords.length,
+                      numberDisplayed,
+                      "prev"
+                    )
+                  }
+                  style={{ cursor: "pointer" }}
+                />
+              )}
               {displayedPodcasts.map((podcast) => {
                 const time = podcast.time[0];
                 const micStyle = getMicStyle(time);
@@ -104,7 +130,7 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
                     src={mic}
                     alt=''
                     className={micStyle}
-                    onClick={() => handlePodcastClick(podcast)} // Open modal on click
+                    onClick={() => handlePodcastClick(podcast)}
                   />
                 );
               })}
@@ -117,9 +143,10 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
                     handleArrowClick(
                       skill,
                       skillRecords.length,
-                      numberDisplayed
+                      numberDisplayed,
+                      "next"
                     )
-                  } // Pass numberDisplayed
+                  }
                   style={{ cursor: "pointer" }}
                 />
               )}
@@ -131,7 +158,6 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
           </div>
         );
       })}
-      {/* Removed internal Modal */}
     </>
   );
 }

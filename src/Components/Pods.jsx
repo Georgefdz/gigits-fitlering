@@ -3,12 +3,9 @@ import mic from "/mic2.png";
 import woodenshelf from "/woodenshelfV2.png";
 import Arrow from "/arrowRight.png";
 import styles from "./pods.module.css";
-// Removed internal Modal import
 import { useWindowSize } from "@uidotdev/usehooks";
 
-function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
-  // Receive the setter
-  // Remove internal selectedPodcast state
+function Pods({ selectedSkills, records, selectedTimes, setSelectedPodcast }) {
   const [currentIndices, setCurrentIndices] = useState({});
   const { width } = useWindowSize();
 
@@ -43,16 +40,16 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
 
   const handlePodcastClick = (podcast) => {
     const spotifyUrl = convertToEmbedUrl(podcast.spotifyUrl);
-    setSelectedPodcast({ ...podcast, spotifyUrl }); // Use the setter from props
+    setSelectedPodcast({ ...podcast, spotifyUrl });
   };
 
   const convertToEmbedUrl = (url) => {
     if (!url) {
       console.log("No URL provided");
-      return ""; // Handle undefined or invalid URLs
+      return "";
     }
 
-    const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1]; // Extract the episode ID
+    const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1];
     console.log("Extracted Spotify Episode ID:", episodeId);
     const embedUrl = episodeId
       ? `https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator`
@@ -74,9 +71,15 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
     return timeToMicStyle[time] || styles.micDefault;
   }
 
+  // Determine which skills to display
+  const skillsToDisplay =
+    selectedSkills.length > 0
+      ? selectedSkills
+      : Array.from(new Set(records.flatMap((record) => record.skill)));
+
   return (
     <>
-      {uniqueSkills.map((skill) => {
+      {skillsToDisplay.map((skill) => {
         const skillRecords = records.filter((record) => {
           const hasSkill = record.skill
             .map((s) => s.toLowerCase())
@@ -153,7 +156,7 @@ function Pods({ uniqueSkills, records, selectedTimes, setSelectedPodcast }) {
             </div>
             <div className={styles.woodContainer}>
               <img src={woodenshelf} alt='' />
-              <span>{skill}</span>
+              <span>{skill.charAt(0).toUpperCase() + skill.slice(1)}</span>
             </div>
           </div>
         );

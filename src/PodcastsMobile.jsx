@@ -28,7 +28,7 @@ function PodcastsMobile() {
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [clicked, setClicked] = useState(false);
-  const [selectedPodcast, setSelectedPodcast] = useState(null); // New state
+  const [selectedPodcast, setSelectedPodcast] = useState(null);
 
   const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -66,7 +66,7 @@ function PodcastsMobile() {
           // Filter the top 10 podcasts based on the "Top" field
           const topPodcasts = formattedRecords
             .filter((record) => record.topScore && !isNaN(record.topScore))
-            .sort((a, b) => b.topScore - a.topScore) // Higher score first
+            .sort((a, b) => b.topScore - a.topScore)
             .slice(0, 10);
 
           setTopPicks(topPodcasts);
@@ -173,10 +173,10 @@ function PodcastsMobile() {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent", // Transparent background
-      color: state.isSelected ? "rgb(6, 144, 103)" : "white", // Change color on selection
+      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent",
+      color: state.isSelected ? "rgb(6, 144, 103)" : "white",
       ":hover": {
-        backgroundColor: "#76b39d", // Hover effect
+        backgroundColor: "#76b39d",
       },
     }),
     multiValue: (provided) => ({
@@ -186,8 +186,8 @@ function PodcastsMobile() {
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: "transparent", // Background color for the dropdown menu
-      border: "2px solid #76b39d", // Border for the dropdown menu
+      backgroundColor: "transparent",
+      border: "2px solid #76b39d",
     }),
   };
 
@@ -240,15 +240,17 @@ function PodcastsMobile() {
                 {showTopPicks && (
                   <Modal
                     title='Top Picks'
-                    topPicks={() => <TopPicks topList={topPicks} />}
+                    topPicks={() => (
+                      <TopPicks topList={topPicks} type={"podcast"} />
+                    )}
                     onClose={() => setShowTopPicks(false)}
                   />
                 )}
                 <Pods
-                  uniqueSkills={uniqueSkills}
+                  selectedSkills={filters.skill}
                   records={filteredRecords}
                   selectedTimes={selectedTimes}
-                  setSelectedPodcast={setSelectedPodcast} // Pass the setter
+                  setSelectedPodcast={setSelectedPodcast}
                 />
               </div>
             </div>
@@ -308,15 +310,17 @@ function PodcastsMobile() {
                 {showTopPicks && (
                   <Modal
                     title='Top Picks'
-                    topPicks={() => <TopPicks topList={topPicks} />}
+                    topPicks={() => (
+                      <TopPicks topList={topPicks} type={"podcast"} />
+                    )}
                     onClose={() => setShowTopPicks(false)}
                   />
                 )}
                 <Pods
-                  uniqueSkills={uniqueSkills}
+                  selectedSkills={filters.skill}
                   records={filteredRecords}
                   selectedTimes={selectedTimes}
-                  setSelectedPodcast={setSelectedPodcast} // Pass the setter
+                  setSelectedPodcast={setSelectedPodcast}
                 />
               </div>
             </div>
@@ -365,7 +369,7 @@ function PodcastsMobile() {
                 className={styles.button}
                 onClick={() => {
                   closeDrawer();
-                  suggestRandomPodcast(); // Suggest random podcast
+                  suggestRandomPodcast();
                 }}
               >
                 Suggest a random podcast

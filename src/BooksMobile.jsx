@@ -13,6 +13,7 @@ import Buk from "./Components/Buk.jsx";
 function BooksMobile() {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
+  const [topPicks, setTopPicks] = useState([]);
   const [filters, setFilters] = useState({
     skill: [],
     concept: [],
@@ -50,11 +51,19 @@ function BooksMobile() {
               author: fields.Author || "unknown",
               oneLiner: fields["One-Liner"] || "",
               link: fields["Link to Reco"] || "",
+              topScore: fields["Top"] || 0,
             };
           });
 
           setRecords(formattedRecords);
           setFilteredRecords(formattedRecords);
+
+          const topBooks = formattedRecords
+            .filter((record) => record.topScore && !isNaN(record.topScore))
+            .sort((a, b) => b.topScore - a.topScore)
+            .slice(0, 10);
+
+          setTopPicks(topBooks);
 
           // Extract unique values for each filter field
           const extractUniqueValues = (records, field) => {
@@ -161,13 +170,13 @@ function BooksMobile() {
       {width < 768 ? (
         <>
           <div className={styles.bodyContainer}>
-            {/* {showTopPicks && (
+            {showTopPicks && (
               <Modal
                 title='Top Picks'
-                // topPicks={() => <TopPicks topList={topPicks} />}
+                topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
                 onClose={() => setShowTopPicks(false)}
               />
-            )} */}
+            )}
             <Buk uniqueSkills={uniqueSkills} records={filteredRecords} />
           </div>
           <Drawer
@@ -201,6 +210,13 @@ function BooksMobile() {
       ) : (
         <>
           <div className={styles.bodyContainer}>
+            {showTopPicks && (
+              <Modal
+                title='Top Picks'
+                topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
+                onClose={() => setShowTopPicks(false)}
+              />
+            )}
             <div className={styles.filterContainer}>
               <FilterComponent
                 filters={filters}

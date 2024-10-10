@@ -1,3 +1,4 @@
+// BooksMobile.jsx
 import { useState, useEffect } from "react";
 import Header from "./Components/Header";
 import Airtable from "airtable";
@@ -24,6 +25,7 @@ function BooksMobile() {
   const [uniqueTypes, setUniqueTypes] = useState([]);
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null); // New state
 
   const { width } = useWindowSize();
 
@@ -164,6 +166,16 @@ function BooksMobile() {
     };
   }, [closeDrawer]);
 
+  // Function to suggest a random book
+  const suggestRandomBook = () => {
+    if (filteredRecords.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * filteredRecords.length);
+    const randomBook = filteredRecords[randomIndex];
+    console.log("Random Book selected:", randomBook);
+
+    setSelectedBook(randomBook);
+  };
+
   return (
     <>
       <Header />
@@ -177,7 +189,11 @@ function BooksMobile() {
                 onClose={() => setShowTopPicks(false)}
               />
             )}
-            <Buk uniqueSkills={uniqueSkills} records={filteredRecords} />
+            <Buk
+              selectedSkills={filters.skill}
+              records={filteredRecords}
+              setSelectedBook={setSelectedBook} // Pass the setter
+            />
           </div>
           <Drawer
             className='drawer'
@@ -189,7 +205,7 @@ function BooksMobile() {
               handleFilterChange={handleFilterChange}
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
-              //   uniqueTypes={uniqueTypes}
+              uniqueTypes={uniqueTypes} // Include if needed
             />
             <div className={styles.buttonContainer}>
               <button
@@ -201,11 +217,26 @@ function BooksMobile() {
               >
                 Top Picks
               </button>
-              <button className={styles.button} onClick={() => closeDrawer()}>
+              <button
+                className={styles.button}
+                onClick={() => {
+                  closeDrawer();
+                  suggestRandomBook();
+                }}
+              >
                 Suggest a random book
               </button>
             </div>
           </Drawer>
+          {selectedBook && (
+            <Modal
+              author={selectedBook.author}
+              oneLiner={selectedBook.oneLiner}
+              cover={selectedBook.recoImg}
+              link={selectedBook.link}
+              onClose={() => setSelectedBook(null)}
+            />
+          )}
         </>
       ) : (
         <>
@@ -223,13 +254,17 @@ function BooksMobile() {
                 handleFilterChange={handleFilterChange}
                 uniqueSkills={uniqueSkills}
                 uniqueConcepts={uniqueConcepts}
-                //   uniqueTypes={uniqueTypes}
+                uniqueTypes={uniqueTypes}
                 customStyles={customStyles}
                 component='Books'
               />
             </div>
             <div className={styles.bookSide}>
-              <Buk uniqueSkills={uniqueSkills} records={filteredRecords} />
+              <Buk
+                selectedSkills={filters.skill}
+                records={filteredRecords}
+                setSelectedBook={setSelectedBook} // Pass the setter
+              />
             </div>
             <div className={styles.buttonSide}>
               <div className={styles.buttonsContainer}>
@@ -244,13 +279,58 @@ function BooksMobile() {
                 </button>
                 <button
                   className={styles.buttons}
-                  onClick={() => closeDrawer()}
+                  onClick={() => {
+                    closeDrawer();
+                    suggestRandomBook();
+                  }}
                 >
                   Suggest a random book
                 </button>
               </div>
             </div>
           </div>
+          <Drawer
+            className='drawer'
+            clicked={clicked}
+            drawerText={"Swipe to filter your book preferences"}
+          >
+            <Accordion2
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              uniqueSkills={uniqueSkills}
+              uniqueConcepts={uniqueConcepts}
+              uniqueTypes={uniqueTypes} // Include if needed
+            />
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.button}
+                onClick={() => {
+                  closeDrawer();
+                  setShowTopPicks(true);
+                }}
+              >
+                Top Picks
+              </button>
+              <button
+                className={styles.button}
+                onClick={() => {
+                  closeDrawer();
+                  suggestRandomBook();
+                }}
+              >
+                Suggest a random book
+              </button>
+            </div>
+          </Drawer>
+          {selectedBook && (
+            <Modal
+              author={selectedBook.author}
+              oneLiner={selectedBook.oneLiner}
+              cover={selectedBook.recoImg}
+              link={selectedBook.link}
+              onClose={() => setSelectedBook(null)}
+            />
+          )}
         </>
       )}
     </>

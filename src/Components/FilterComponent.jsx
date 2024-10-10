@@ -1,4 +1,3 @@
-// src/Components/FilterComponent.jsx
 import React from "react";
 import Select from "react-select";
 
@@ -13,7 +12,7 @@ const FilterComponent = ({
   customStyles,
   component,
 }) => {
-  if (component == "Books") {
+  if (component === "Books") {
     return (
       <div className='filter-container'>
         <label>
@@ -54,7 +53,7 @@ const FilterComponent = ({
             classNamePrefix='react-select'
           />
         </label>
-        {/* <label>
+        <label>
           Type:
           <Select
             name='type'
@@ -72,7 +71,7 @@ const FilterComponent = ({
             className='react-select-container'
             classNamePrefix='react-select'
           />
-        </label> */}
+        </label>
       </div>
     );
   }
@@ -136,44 +135,6 @@ const FilterComponent = ({
             classNamePrefix='react-select'
           />
         </label>
-        {/* <label>
-          Time to Finish:
-          <Select
-            name='time'
-            options={uniqueTimes.map((time) => ({
-              value: time,
-              label: time.charAt(0).toUpperCase() + time.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.time.map((time) => ({
-              value: time,
-              label: time.charAt(0).toUpperCase() + time.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label> */}
-        {/* <label>
-          Type:
-          <Select
-            name='type'
-            options={uniqueTypes.map((type) => ({
-              value: type,
-              label: type.charAt(0).toUpperCase() + type.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.type.map((type) => ({
-              value: type,
-              label: type.charAt(0).toUpperCase() + type.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label> */}
       </div>
     );
   }

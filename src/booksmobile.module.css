@@ -1,10 +1,11 @@
 .bodyContainer {
-  width: 90dvw;
+  width: 100dvw;
   height: 80dvh;
   display: grid;
   grid-template-rows: 150px 70dvh;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
+  overflow-y: hidden;
 }
 
 .filterContainer {
@@ -13,11 +14,17 @@
 
 .bookSide {
   width: 90%;
-  grid-column: 2 / 3;
+  grid-column: 2 / 4;
   grid-row: 2 / 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0px 20px;
+  align-items: start;
+  align-content: space-evenly;
 }
 
 .buttonSide {
+  margin-top: 100px;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
 }
@@ -59,5 +66,11 @@
     margin-top: 20px;
     padding: 0px 20px;
     display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .bookSide {
+    gap: 0px 80px;
   }
 }

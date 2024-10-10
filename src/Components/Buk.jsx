@@ -1,7 +1,7 @@
+// Buk.jsx
 import { useState } from "react";
 import woodenshelf from "/woodenshelfV2.png";
-import Arrow from "/arrow.svg";
-import Modal from "./Modal";
+import Arrow from "/arrowRight.png";
 import { useWindowSize } from "@uidotdev/usehooks";
 import styles from "./buk.module.css";
 import book1 from "/book1.png";
@@ -10,9 +10,17 @@ import book3 from "/book3.png";
 import book4 from "/book4.png";
 import book5 from "/book5.png";
 
-function Buk({ uniqueSkills, records }) {
-  const [selectedBook, setSelectedBook] = useState(null);
+function Buk({ selectedSkills, records, setSelectedBook }) {
+  const [currentIndices, setCurrentIndices] = useState({});
   const { width } = useWindowSize();
+
+  let numberDisplayed;
+
+  if (width > 768) {
+    numberDisplayed = 10;
+  } else {
+    numberDisplayed = 8;
+  }
 
   const bookImages = [book1, book2, book3, book4, book5];
 
@@ -20,6 +28,37 @@ function Buk({ uniqueSkills, records }) {
     const randomIndex = Math.floor(Math.random() * bookImages.length);
     return bookImages[randomIndex];
   };
+
+  const handleArrowClick = (skill, totalCount, numberDisplayed, direction) => {
+    setCurrentIndices((prev) => {
+      const currentIndex = prev[skill] || 0;
+      let newIndex;
+
+      if (direction === "next") {
+        newIndex =
+          currentIndex + numberDisplayed < totalCount
+            ? currentIndex + numberDisplayed
+            : currentIndex;
+      } else if (direction === "prev") {
+        newIndex =
+          currentIndex - numberDisplayed >= 0
+            ? currentIndex - numberDisplayed
+            : 0;
+      }
+
+      return { ...prev, [skill]: newIndex };
+    });
+  };
+
+  const handleBookClick = (book) => {
+    setSelectedBook(book); // Use the setter from props
+  };
+
+  // Determine which skills to display
+  const skillsToDisplay =
+    selectedSkills.length > 0
+      ? selectedSkills
+      : Array.from(new Set(records.flatMap((record) => record.skill)));
 
   const filterBooksBySkill = (skill) => {
     const filteredBooks = records.filter((record) =>
@@ -31,26 +70,42 @@ function Buk({ uniqueSkills, records }) {
     return filteredBooks;
   };
 
-  const handleBookClick = (book) => {
-    setSelectedBook({ ...book }); // Set the selected podcast when a podcast is clicked
-  };
-
-  const closeModal = () => {
-    setSelectedBook(null);
-  };
-
   return (
     <>
-      {uniqueSkills.map((skill) => {
+      {skillsToDisplay.map((skill) => {
         const booksForSkill = filterBooksBySkill(skill);
         if (booksForSkill.length === 0) {
           return null;
         }
+
+        const currentIndex = currentIndices[skill] || 0;
+        const displayedBooks = booksForSkill.slice(
+          currentIndex,
+          currentIndex + numberDisplayed
+        );
+        const hasMore = booksForSkill.length > currentIndex + numberDisplayed;
+        const hasPrevious = currentIndex > 0;
+
         return (
-          <div key={skill}>
-            {/* Render books above the shelf */}
+          <div key={skill} className={styles.shelfContainer}>
             <div className={styles.booksContainer}>
-              {booksForSkill.map((book) => (
+              {hasPrevious && (
+                <img
+                  src={Arrow}
+                  alt='Previous books'
+                  className={`${styles.arrowIcon} ${styles.arrowIconLeft}`}
+                  onClick={() =>
+                    handleArrowClick(
+                      skill,
+                      booksForSkill.length,
+                      numberDisplayed,
+                      "prev"
+                    )
+                  }
+                  style={{ cursor: "pointer" }}
+                />
+              )}
+              {displayedBooks.map((book) => (
                 <div className={styles.bookItem} key={book.id}>
                   <img
                     src={getRandomBookImage()}
@@ -58,29 +113,37 @@ function Buk({ uniqueSkills, records }) {
                     className={styles.bookImage}
                     onClick={() => handleBookClick(book)}
                   />
-                  <span className={styles.bookName}></span>
+                  {/* <div className={styles.bookInfo}>
+                    <span className={styles.bookName}>{book.name}</span>
+                    <span className={styles.bookAuthor}>{book.author}</span>
+                  </div> */}
                 </div>
               ))}
+              {hasMore && (
+                <img
+                  src={Arrow}
+                  alt='More books'
+                  className={styles.arrowIcon}
+                  onClick={() =>
+                    handleArrowClick(
+                      skill,
+                      booksForSkill.length,
+                      numberDisplayed,
+                      "next"
+                    )
+                  }
+                  style={{ cursor: "pointer" }}
+                />
+              )}
             </div>
-
-            {/* Render the wooden shelf */}
             <div className={styles.woodContainer}>
               <img src={woodenshelf} alt='Wooden Shelf' />
-              <span>{skill}</span>
+              <span>{skill.charAt(0).toUpperCase() + skill.slice(1)}</span>
             </div>
           </div>
         );
       })}
-
-      {selectedBook && (
-        <Modal
-          author={selectedBook.author}
-          oneLiner={selectedBook.oneLiner}
-          cover={selectedBook.recoImg}
-          link={selectedBook.link}
-          onClose={closeModal}
-        />
-      )}
+      {/* Removed Modal rendering */}
     </>
   );
 }

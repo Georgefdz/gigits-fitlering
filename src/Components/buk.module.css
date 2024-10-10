@@ -45,3 +45,22 @@
   align-items: center;
   justify-content: center;
 }
+
+.arrowIcon {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s;
+  align-self: center;
+  position: relative;
+  right: -20px;
+}
+
+.arrowIcon:hover {
+  transform: translateX(5px);
+}
+
+.arrowIconLeft {
+  transform: rotate(180deg);
+  position: relative;
+  right: 20px;
+}

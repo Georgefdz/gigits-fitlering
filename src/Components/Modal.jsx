@@ -43,7 +43,11 @@ function Modal({
   return ReactDOM.createPortal(
     <div className={styles.modalContainer}>
       {description && (
-        <div className={styles.modal} ref={modalRef} onClick={handleModalClick}>
+        <div
+          className={styles.modalPod}
+          ref={modalRef}
+          onClick={handleModalClick}
+        >
           <SpotifyPlayer url={spotifyUrl} />
           <h3>{description}</h3>
           <div className={styles.bottomSpan}>

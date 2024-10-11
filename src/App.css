@@ -381,6 +381,7 @@ label > select {
   margin-left: 50px;
   font-size: 20px;
   color: white;
+  padding-left: 0px;
 }
 
 .top-picks-list a {
@@ -502,10 +503,6 @@ label > select {
     display: none;
   }
 
-  .top-picks-list {
-    margin-left: 15px;
-  }
-
   body {
     overflow-y: hidden;
   }
@@ -518,10 +515,6 @@ label > select {
     background-color: red;
   }
 
-  .top-picks-list {
-    margin-left: 10px;
-  }
-
   label {
     color: black;
     padding: 0px;
@@ -530,5 +523,8 @@ label > select {
 
   .top-picks-list {
     font-size: 1.2rem;
+    margin: 0px 10px;
+    list-style-position: inside;
+    padding-bottom: 20px;
   }
 }

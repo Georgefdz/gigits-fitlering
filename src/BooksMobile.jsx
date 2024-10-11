@@ -271,7 +271,6 @@ function BooksMobile() {
                 <button
                   className={styles.buttons}
                   onClick={() => {
-                    closeDrawer();
                     setShowTopPicks(true);
                   }}
                 >
@@ -280,7 +279,6 @@ function BooksMobile() {
                 <button
                   className={styles.buttons}
                   onClick={() => {
-                    closeDrawer();
                     suggestRandomBook();
                   }}
                 >
@@ -289,39 +287,6 @@ function BooksMobile() {
               </div>
             </div>
           </div>
-          <Drawer
-            className='drawer'
-            clicked={clicked}
-            drawerText={"Swipe to filter your book preferences"}
-          >
-            <Accordion2
-              filters={filters}
-              handleFilterChange={handleFilterChange}
-              uniqueSkills={uniqueSkills}
-              uniqueConcepts={uniqueConcepts}
-              uniqueTypes={uniqueTypes} // Include if needed
-            />
-            <div className={styles.buttonContainer}>
-              <button
-                className={styles.button}
-                onClick={() => {
-                  closeDrawer();
-                  setShowTopPicks(true);
-                }}
-              >
-                Top Picks
-              </button>
-              <button
-                className={styles.button}
-                onClick={() => {
-                  closeDrawer();
-                  suggestRandomBook();
-                }}
-              >
-                Suggest a random book
-              </button>
-            </div>
-          </Drawer>
           {selectedBook && (
             <Modal
               author={selectedBook.author}

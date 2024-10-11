@@ -5,7 +5,6 @@
   grid-template-rows: 150px 70dvh;
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
-  overflow-y: hidden;
 }
 
 .filterContainer {
@@ -21,6 +20,7 @@
   gap: 0px 20px;
   align-items: start;
   align-content: space-evenly;
+  min-height: 60dvh;
 }
 
 .buttonSide {

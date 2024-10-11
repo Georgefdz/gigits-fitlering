@@ -1,4 +1,3 @@
-// BooksMobile.jsx
 import { useState, useEffect } from "react";
 import Header from "./Components/Header";
 import Airtable from "airtable";
@@ -263,7 +262,7 @@ function BooksMobile() {
               <Buk
                 selectedSkills={filters.skill}
                 records={filteredRecords}
-                setSelectedBook={setSelectedBook} // Pass the setter
+                setSelectedBook={setSelectedBook}
               />
             </div>
             <div className={styles.buttonSide}>

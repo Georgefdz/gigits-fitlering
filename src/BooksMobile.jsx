@@ -24,92 +24,79 @@ function BooksMobile() {
   const [uniqueTypes, setUniqueTypes] = useState([]);
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null); // New state
-
+  const [selectedBook, setSelectedBook] = useState(null);
   const { width } = useWindowSize();
-
   const API_KEY = import.meta.env.VITE_API_KEY;
 
+  // Fetch Airtable records and initialize filters
   useEffect(() => {
     const base = new Airtable({ apiKey: API_KEY }).base("appz3L59vDo6XArUw");
 
     base("Books")
-      .select({
-        maxRecords: 100,
-        view: "Grid view",
-      })
+      .select({ maxRecords: 100, view: "Grid view" })
       .eachPage(
         (records, fetchNextPage) => {
-          const formattedRecords = records.map((record) => {
-            const fields = record.fields || {};
-            return {
-              id: record.id,
-              name: fields.Name || "",
-              skill: fields["Skill not taught in School"] || [],
-              concept: fields["Key Concepts"] || [],
-              type: fields.Type || [],
-              recoImg: fields.Portadas?.[0]?.url || null, // Book cover image
-              author: fields.Author || "unknown",
-              oneLiner: fields["One-Liner"] || "",
-              link: fields["Link to Reco"] || "",
-              topScore: fields["Top"] || 0,
-            };
-          });
-
+          const formattedRecords = formatRecords(records);
           setRecords(formattedRecords);
           setFilteredRecords(formattedRecords);
-
-          const topBooks = formattedRecords
-            .filter((record) => record.topScore && !isNaN(record.topScore))
-            .sort((a, b) => b.topScore - a.topScore)
-            .slice(0, 10);
-
-          setTopPicks(topBooks);
-
-          // Extract unique values for each filter field
-          const extractUniqueValues = (records, field) => {
-            const valueSet = new Set();
-            records.forEach((record) => {
-              const values = record[field];
-              if (Array.isArray(values)) {
-                values.forEach((value) =>
-                  valueSet.add(value.trim().toLowerCase())
-                );
-              }
-            });
-            return Array.from(valueSet).sort();
-          };
-
+          setTopPicks(getTopPicks(formattedRecords));
           setUniqueSkills(extractUniqueValues(formattedRecords, "skill"));
           setUniqueConcepts(extractUniqueValues(formattedRecords, "concept"));
           setUniqueTypes(extractUniqueValues(formattedRecords, "type"));
-
           fetchNextPage();
         },
         (err) => {
-          if (err) {
-            console.error("Error fetching Airtable records:", err);
-          }
+          if (err) console.error("Error fetching Airtable records:", err);
         }
       );
   }, []);
 
-  const handleFilterChange = (selectedOptions, { name }) => {
-    let selectedValues = [];
-    if (Array.isArray(selectedOptions)) {
-      if (typeof selectedOptions[0] === "string") {
-        // From mobile (CheckboxGroup)
-        selectedValues = selectedOptions;
-      } else {
-        // From desktop (React Select)
-        selectedValues = selectedOptions.map((option) => option.value);
-      }
-    }
-
-    setFilters({
-      ...filters,
-      [name]: selectedValues,
+  // Format Airtable records
+  const formatRecords = (records) =>
+    records.map((record) => {
+      const fields = record.fields || {};
+      return {
+        id: record.id,
+        name: fields.Name || "",
+        skill: fields["Skill not taught in School"] || [],
+        concept: fields["Key Concepts"] || [],
+        type: fields.Type || [],
+        recoImg: fields.Portadas?.[0]?.url || null,
+        author: fields.Author || "unknown",
+        oneLiner: fields["One-Liner"] || "",
+        link: fields["Link to Reco"] || "",
+        topScore: fields["Top"] || 0,
+      };
     });
+
+  const getTopPicks = (records) =>
+    records
+      .filter((record) => record.topScore && !isNaN(record.topScore))
+      .sort((a, b) => b.topScore - a.topScore)
+      .slice(0, 10);
+
+  const extractUniqueValues = (records, field) => {
+    const valueSet = new Set();
+    records.forEach((record) => {
+      const values = record[field];
+      if (Array.isArray(values)) {
+        values.forEach((value) => valueSet.add(value.trim().toLowerCase()));
+      }
+    });
+    return Array.from(valueSet).sort();
+  };
+
+  const handleFilterChange = (selectedOptions, { name }) => {
+    const selectedValues = Array.isArray(selectedOptions)
+      ? selectedOptions.map((option) =>
+          typeof option === "string" ? option : option.value
+        )
+      : [];
+
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: selectedValues,
+    }));
   };
 
   useEffect(() => {
@@ -117,14 +104,12 @@ function BooksMobile() {
       const matchesArray = (array, filter) =>
         filter.length === 0 ||
         array.some((value) => filter.includes(value.trim().toLowerCase()));
-
       return (
         matchesArray(record.skill, filters.skill) &&
         matchesArray(record.concept, filters.concept) &&
         matchesArray(record.type, filters.type)
       );
     });
-
     setFilteredRecords(filtered);
   }, [filters, records]);
 
@@ -137,11 +122,9 @@ function BooksMobile() {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent", // Transparent background
-      color: state.isSelected ? "rgb(6, 144, 103)" : "white", // Change color on selection
-      ":hover": {
-        backgroundColor: "#76b39d", // Hover effect
-      },
+      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent",
+      color: state.isSelected ? "rgb(6, 144, 103)" : "white",
+      ":hover": { backgroundColor: "#76b39d" },
     }),
     multiValue: (provided) => ({
       ...provided,
@@ -150,30 +133,62 @@ function BooksMobile() {
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: "transparent", // Background color for the dropdown menu
-      border: "2px solid #76b39d", // Border for the dropdown menu
+      backgroundColor: "transparent",
+      border: "2px solid #76b39d",
     }),
   };
 
-  const closeDrawer = () => {
-    setClicked(true);
-  };
-
-  useEffect(() => {
-    return () => {
-      setClicked(false);
-    };
-  }, [closeDrawer]);
-
-  // Function to suggest a random book
   const suggestRandomBook = () => {
     if (filteredRecords.length === 0) return;
-    const randomIndex = Math.floor(Math.random() * filteredRecords.length);
-    const randomBook = filteredRecords[randomIndex];
-    console.log("Random Book selected:", randomBook);
-
+    const randomBook =
+      filteredRecords[Math.floor(Math.random() * filteredRecords.length)];
     setSelectedBook(randomBook);
   };
+
+  const closeDrawer = () => setClicked(true);
+
+  const renderSelectedBookModal = () =>
+    selectedBook && (
+      <Modal
+        author={selectedBook.author}
+        oneLiner={selectedBook.oneLiner}
+        cover={selectedBook.recoImg}
+        link={selectedBook.link}
+        onClose={() => setSelectedBook(null)}
+      />
+    );
+
+  const renderTopPicksModal = () =>
+    showTopPicks && (
+      <Modal
+        title='Top Picks'
+        topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
+        onClose={() => setShowTopPicks(false)}
+      />
+    );
+
+  const renderButtons = () => (
+    <div className={styles.buttonContainer}>
+      <button
+        className={styles.button}
+        onClick={() => {
+          closeDrawer();
+          setShowTopPicks(true);
+        }}
+      >
+        Top Picks
+      </button>
+      <button
+        className={styles.button}
+        onClick={() => {
+          closeDrawer();
+          suggestRandomBook();
+        }}
+      >
+        Suggest a random book
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -181,17 +196,11 @@ function BooksMobile() {
       {width < 768 ? (
         <>
           <div className={styles.bodyContainer}>
-            {showTopPicks && (
-              <Modal
-                title='Top Picks'
-                topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
-                onClose={() => setShowTopPicks(false)}
-              />
-            )}
+            {renderTopPicksModal()}
             <Buk
               selectedSkills={filters.skill}
               records={filteredRecords}
-              setSelectedBook={setSelectedBook} // Pass the setter
+              setSelectedBook={setSelectedBook}
             />
           </div>
           <Drawer
@@ -204,49 +213,16 @@ function BooksMobile() {
               handleFilterChange={handleFilterChange}
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
-              uniqueTypes={uniqueTypes} // Include if needed
+              uniqueTypes={uniqueTypes}
             />
-            <div className={styles.buttonContainer}>
-              <button
-                className={styles.button}
-                onClick={() => {
-                  closeDrawer();
-                  setShowTopPicks(true);
-                }}
-              >
-                Top Picks
-              </button>
-              <button
-                className={styles.button}
-                onClick={() => {
-                  closeDrawer();
-                  suggestRandomBook();
-                }}
-              >
-                Suggest a random book
-              </button>
-            </div>
+            {renderButtons()}
           </Drawer>
-          {selectedBook && (
-            <Modal
-              author={selectedBook.author}
-              oneLiner={selectedBook.oneLiner}
-              cover={selectedBook.recoImg}
-              link={selectedBook.link}
-              onClose={() => setSelectedBook(null)}
-            />
-          )}
+          {renderSelectedBookModal()}
         </>
       ) : (
         <>
           <div className={styles.bodyContainer}>
-            {showTopPicks && (
-              <Modal
-                title='Top Picks'
-                topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
-                onClose={() => setShowTopPicks(false)}
-              />
-            )}
+            {renderTopPicksModal()}
             <div className={styles.filterContainer}>
               <FilterComponent
                 filters={filters}
@@ -265,36 +241,9 @@ function BooksMobile() {
                 setSelectedBook={setSelectedBook}
               />
             </div>
-            <div className={styles.buttonSide}>
-              <div className={styles.buttonsContainer}>
-                <button
-                  className={styles.buttons}
-                  onClick={() => {
-                    setShowTopPicks(true);
-                  }}
-                >
-                  Top Picks
-                </button>
-                <button
-                  className={styles.buttons}
-                  onClick={() => {
-                    suggestRandomBook();
-                  }}
-                >
-                  Suggest a random book
-                </button>
-              </div>
-            </div>
+            <div className={styles.buttonSide}>{renderButtons()}</div>
           </div>
-          {selectedBook && (
-            <Modal
-              author={selectedBook.author}
-              oneLiner={selectedBook.oneLiner}
-              cover={selectedBook.recoImg}
-              link={selectedBook.link}
-              onClose={() => setSelectedBook(null)}
-            />
-          )}
+          {renderSelectedBookModal()}
         </>
       )}
     </>

@@ -1,4 +1,3 @@
-// Buk.jsx
 import { useState } from "react";
 import woodenshelf from "/woodenshelfV2.png";
 import Arrow from "/arrowRight.png";
@@ -51,7 +50,7 @@ function Buk({ selectedSkills, records, setSelectedBook }) {
   };
 
   const handleBookClick = (book) => {
-    setSelectedBook(book); // Use the setter from props
+    setSelectedBook(book);
   };
 
   // Determine which skills to display
@@ -113,10 +112,6 @@ function Buk({ selectedSkills, records, setSelectedBook }) {
                     className={styles.bookImage}
                     onClick={() => handleBookClick(book)}
                   />
-                  {/* <div className={styles.bookInfo}>
-                    <span className={styles.bookName}>{book.name}</span>
-                    <span className={styles.bookAuthor}>{book.author}</span>
-                  </div> */}
                 </div>
               ))}
               {hasMore && (
@@ -143,7 +138,6 @@ function Buk({ selectedSkills, records, setSelectedBook }) {
           </div>
         );
       })}
-      {/* Removed Modal rendering */}
     </>
   );
 }

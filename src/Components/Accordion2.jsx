@@ -17,14 +17,6 @@ function Accordion2({
 }) {
   return (
     <div style={{ paddingTop: "20px" }}>
-      {/* <span>Show items that match: </span>
-      <CheckboxGroup
-        options={matchh}
-        selectedOptions={matchh[0]}
-        name='matchh'
-        className={"formGroup"}
-      /> */}
-
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}

@@ -65,7 +65,6 @@ function Buk({ selectedSkills, records, setSelectedBook }) {
         (s) => s.trim().toLowerCase() === skill.trim().toLowerCase()
       )
     );
-    // console.log(`Books for ${skill}:`, filteredBooks); // Debug log
     return filteredBooks;
   };
 

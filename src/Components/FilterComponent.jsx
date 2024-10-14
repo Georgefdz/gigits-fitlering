@@ -1,6 +1,32 @@
 import React from "react";
 import Select from "react-select";
 
+// Helper function to create Select component
+const createSelect = ({
+  name,
+  options,
+  filters,
+  handleFilterChange,
+  customStyles,
+}) => (
+  <Select
+    name={name}
+    options={options.map((option) => ({
+      value: option,
+      label: option.charAt(0).toUpperCase() + option.slice(1),
+    }))}
+    onChange={handleFilterChange}
+    isMulti
+    value={filters.map((filter) => ({
+      value: filter,
+      label: filter.charAt(0).toUpperCase() + filter.slice(1),
+    }))}
+    styles={customStyles}
+    className='react-select-container'
+    classNamePrefix='react-select'
+  />
+);
+
 const FilterComponent = ({
   filters,
   handleFilterChange,
@@ -12,132 +38,61 @@ const FilterComponent = ({
   customStyles,
   component,
 }) => {
-  if (component === "Books") {
-    return (
-      <div className='filter-container'>
-        <label>
-          Skill not taught in school:
-          <Select
-            name='skill'
-            options={uniqueSkills.map((skill) => ({
-              value: skill,
-              label: skill.charAt(0).toUpperCase() + skill.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.skill.map((skill) => ({
-              value: skill,
-              label: skill.charAt(0).toUpperCase() + skill.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-        <label>
-          Key Concept:
-          <Select
-            name='concept'
-            options={uniqueConcepts.map((concept) => ({
-              value: concept,
-              label: concept.charAt(0).toUpperCase() + concept.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.concept.map((concept) => ({
-              value: concept,
-              label: concept.charAt(0).toUpperCase() + concept.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-        <label>
-          Type:
-          <Select
-            name='type'
-            options={uniqueTypes.map((type) => ({
-              value: type,
-              label: type.charAt(0).toUpperCase() + type.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.type.map((type) => ({
-              value: type,
-              label: type.charAt(0).toUpperCase() + type.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-      </div>
-    );
-  }
-  if (component === "Podcasts") {
-    return (
-      <div className='filter-container'>
-        <label>
-          Skill not taught in school:
-          <Select
-            name='skill'
-            options={uniqueSkills.map((skill) => ({
-              value: skill,
-              label: skill.charAt(0).toUpperCase() + skill.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.skill.map((skill) => ({
-              value: skill,
-              label: skill.charAt(0).toUpperCase() + skill.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-        <label>
-          Key Concept:
-          <Select
-            name='concept'
-            options={uniqueConcepts.map((concept) => ({
-              value: concept,
-              label: concept.charAt(0).toUpperCase() + concept.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.concept.map((concept) => ({
-              value: concept,
-              label: concept.charAt(0).toUpperCase() + concept.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-        <label>
-          Language:
-          <Select
-            name='language'
-            options={uniqueLanguages.map((language) => ({
-              value: language,
-              label: language.charAt(0).toUpperCase() + language.slice(1),
-            }))}
-            onChange={handleFilterChange}
-            isMulti
-            value={filters.language.map((language) => ({
-              value: language,
-              label: language.charAt(0).toUpperCase() + language.slice(1),
-            }))}
-            styles={customStyles}
-            className='react-select-container'
-            classNamePrefix='react-select'
-          />
-        </label>
-      </div>
-    );
-  }
+  const sharedFilters = [
+    {
+      label: "Skill not taught in school",
+      name: "skill",
+      options: uniqueSkills,
+      filterValue: filters.skill,
+    },
+    {
+      label: "Key Concept",
+      name: "concept",
+      options: uniqueConcepts,
+      filterValue: filters.concept,
+    },
+  ];
+
+  const componentSpecificFilters = {
+    Books: [
+      {
+        label: "Type",
+        name: "type",
+        options: uniqueTypes,
+        filterValue: filters.type,
+      },
+    ],
+    Podcasts: [
+      {
+        label: "Language",
+        name: "language",
+        options: uniqueLanguages,
+        filterValue: filters.language,
+      },
+    ],
+  };
+
+  const renderFilters = (filterData) =>
+    filterData.map(({ label, name, options, filterValue }) => (
+      <label key={name}>
+        {label}:
+        {createSelect({
+          name,
+          options,
+          filters: filterValue,
+          handleFilterChange,
+          customStyles,
+        })}
+      </label>
+    ));
+
+  return (
+    <div className='filter-container'>
+      {renderFilters(sharedFilters)}
+      {componentSpecificFilters[component] &&
+        renderFilters(componentSpecificFilters[component])}
+    </div>
+  );
 };
 
 export default FilterComponent;

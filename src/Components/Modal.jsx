@@ -14,8 +14,11 @@ function Modal({
   cover,
   link,
   onClose,
+  time,
+  skills,
+  concepts,
 }) {
-  console.log("Modal spotifyUrl:", spotifyUrl);
+  // console.log("Modal spotifyUrl:", spotifyUrl);
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -50,6 +53,16 @@ function Modal({
         >
           <SpotifyPlayer url={spotifyUrl} />
           <h3>{description}</h3>
+          <div className={styles.tagsContainer}>
+            <p>{time}</p>
+            {skills.map((skill) => (
+              <p key={skill}>{skill}</p>
+            ))}
+            {concepts.map((concept) => (
+              <p key={concept}>{concept}</p>
+            ))}
+          </div>
+
           <div className={styles.bottomSpan}>
             <a
               href='https://gigits.io'

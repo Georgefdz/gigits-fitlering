@@ -50,11 +50,11 @@ function Pods({ selectedSkills, records, selectedTimes, setSelectedPodcast }) {
     }
 
     const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1];
-    console.log("Extracted Spotify Episode ID:", episodeId);
+    // console.log("Extracted Spotify Episode ID:", episodeId);
     const embedUrl = episodeId
       ? `https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator`
       : "";
-    console.log("Final Embed URL:", embedUrl);
+    // console.log("Final Embed URL:", embedUrl);
     return embedUrl;
   };
 

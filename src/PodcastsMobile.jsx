@@ -298,6 +298,9 @@ function PodcastsMobile() {
             <Modal
               description={selectedPodcast.description}
               spotifyUrl={selectedPodcast.spotifyUrl}
+              time={selectedPodcast.time}
+              skills={selectedPodcast.skill}
+              concepts={selectedPodcast.concept}
               onClose={() => setSelectedPodcast(null)}
             />
           )}
@@ -380,6 +383,9 @@ function PodcastsMobile() {
             <Modal
               description={selectedPodcast.description}
               spotifyUrl={selectedPodcast.spotifyUrl}
+              time={selectedPodcast.time}
+              skills={selectedPodcast.skill}
+              concepts={selectedPodcast.concept}
               onClose={() => setSelectedPodcast(null)}
             />
           )}

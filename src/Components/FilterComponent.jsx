@@ -1,5 +1,6 @@
 import React from "react";
 import Select from "react-select";
+import { customStyles } from "../utils/utils";
 
 // Helper function to create Select component
 const createSelect = ({
@@ -35,7 +36,6 @@ const FilterComponent = ({
   uniqueTypes,
   uniqueTimes,
   uniqueLanguages,
-  customStyles,
   component,
 }) => {
   const sharedFilters = [

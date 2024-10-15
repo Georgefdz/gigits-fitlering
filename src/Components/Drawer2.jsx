@@ -9,7 +9,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 const drawerBleeding = 56;
 
 const StyledBox = styled("div")(({ theme }) => ({
-  backgroundColor: "var(--main-bg-color);",
+  backgroundColor: "#616660",
   ...theme.applyStyles("dark", {
     backgroundColor: grey[800],
   }),
@@ -86,7 +86,7 @@ function Drawer2({
           style={{
             display: "flex",
             padding: "5px",
-            backgroundColor: "rgb(32, 32, 32)",
+            backgroundColor: "#616660",
             justifyContent: "space-around",
             borderRight: ".5px solid rgb(118, 179, 157)",
             borderLeft: ".5px solid rgb(118, 179, 157)",
@@ -96,7 +96,7 @@ function Drawer2({
             style={{
               marginBottom: "8px",
               color: "white",
-              backgroundColor: "rgb(32, 32, 32)",
+              backgroundColor: "#616660",
               fontSize: "12px",
             }}
           >
@@ -113,7 +113,7 @@ function Drawer2({
           <label
             style={{
               color: "white",
-              backgroundColor: "rgb(32, 32, 32)",
+              backgroundColor: "#616660",
               fontSize: "12px",
             }}
           >

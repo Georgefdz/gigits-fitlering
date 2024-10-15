@@ -25,6 +25,10 @@ function BooksMobile() {
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+
+  // New state for filter mode
+  const [filterMode, setFilterMode] = useState("all"); // 'all' or 'any'
+
   const { width } = useWindowSize();
   const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -58,9 +62,13 @@ function BooksMobile() {
       return {
         id: record.id,
         name: fields.Name || "",
-        skill: fields["Skill not taught in School"] || [],
-        concept: fields["Key Concepts"] || [],
-        type: fields.Type || [],
+        skill: fields["Skill not taught in School"]
+          ? fields["Skill not taught in School"].map((s) => s.toLowerCase())
+          : [],
+        concept: fields["Key Concepts"]
+          ? fields["Key Concepts"].map((c) => c.toLowerCase())
+          : [],
+        type: fields.Type ? fields.Type.map((t) => t.toLowerCase()) : [],
         recoImg: fields.Portadas?.[0]?.url || null,
         author: fields.Author || "unknown",
         oneLiner: fields["One-Liner"] || "",
@@ -86,12 +94,41 @@ function BooksMobile() {
     return Array.from(valueSet).sort();
   };
 
+  // Effect to handle filterMode changes
+  useEffect(() => {
+    if (filterMode === "all") {
+      // When "All Selected Criteria" is selected, set all filters to include all options
+      setFilters({
+        skill: [...uniqueSkills],
+        concept: [...uniqueConcepts],
+        type: [...uniqueTypes],
+      });
+    } else if (filterMode === "any") {
+      // When "At Least 1 Selected Criteria" is selected, clear all filters
+      setFilters({
+        skill: [],
+        concept: [],
+        type: [],
+      });
+    }
+  }, [filterMode, uniqueSkills, uniqueConcepts, uniqueTypes]);
+
   const handleFilterChange = (selectedOptions, { name }) => {
-    const selectedValues = Array.isArray(selectedOptions)
-      ? selectedOptions.map((option) =>
-          typeof option === "string" ? option : option.value
-        )
-      : [];
+    let selectedValues = [];
+    if (Array.isArray(selectedOptions)) {
+      if (
+        selectedOptions.length > 0 &&
+        typeof selectedOptions[0] === "string"
+      ) {
+        // From mobile (CheckboxGroup)
+        selectedValues = selectedOptions.map((opt) => opt.toLowerCase());
+      } else if (selectedOptions.length > 0 && selectedOptions[0].value) {
+        // From desktop (React Select)
+        selectedValues = selectedOptions.map((option) =>
+          option.value.toLowerCase()
+        );
+      }
+    }
 
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -99,25 +136,53 @@ function BooksMobile() {
     }));
   };
 
+  // Update filteredRecords based on filterMode and filters
   useEffect(() => {
-    const filtered = records.filter((record) => {
-      const matchesArray = (array, filter) =>
-        filter.length === 0 ||
-        array.some((value) => filter.includes(value.trim().toLowerCase()));
-      return (
-        matchesArray(record.skill, filters.skill) &&
-        matchesArray(record.concept, filters.concept) &&
-        matchesArray(record.type, filters.type)
+    if (filterMode === "all") {
+      // "All Selected Criteria" mode: AND logic across filter categories
+      const filtered = records.filter((record) => {
+        return Object.keys(filters).every((category) => {
+          const selected = filters[category];
+          if (selected.length === 0) return true; // No filters in this category
+
+          // Check if the record matches at least one selected option in this category
+          return record[category].some((item) =>
+            selected.includes(item.toLowerCase())
+          );
+        });
+      });
+      setFilteredRecords(filtered);
+    } else if (filterMode === "any") {
+      // "At Least 1 Selected Criteria" mode: OR logic across all filter categories
+      const hasAnyFilterSelected = Object.values(filters).some(
+        (filterArray) => filterArray.length > 0
       );
-    });
-    setFilteredRecords(filtered);
-  }, [filters, records]);
+
+      if (!hasAnyFilterSelected) {
+        setFilteredRecords([]); // No filters selected, show nothing
+        return;
+      }
+
+      const filtered = records.filter((record) => {
+        return Object.keys(filters).some((category) => {
+          const selected = filters[category];
+          if (selected.length === 0) return false; // No filters in this category
+
+          // Check if the record matches at least one selected option in this category
+          return record[category].some((item) =>
+            selected.includes(item.toLowerCase())
+          );
+        });
+      });
+      setFilteredRecords(filtered);
+    }
+  }, [filters, records, filterMode]);
 
   const suggestRandomBook = () => {
-    if (filteredRecords.length === 0) return;
     const randomBook =
       filteredRecords[Math.floor(Math.random() * filteredRecords.length)];
     setSelectedBook(randomBook);
+    // setClicked(false);
   };
 
   const closeDrawer = () => setClicked(true);
@@ -129,7 +194,10 @@ function BooksMobile() {
         oneLiner={selectedBook.oneLiner}
         cover={selectedBook.recoImg}
         link={selectedBook.link}
-        onClose={() => setSelectedBook(null)}
+        onClose={() => {
+          setSelectedBook(null);
+          setClicked(false);
+        }}
       />
     );
 
@@ -138,7 +206,10 @@ function BooksMobile() {
       <Modal
         title='Top Picks'
         topPicks={() => <TopPicks topList={topPicks} type={"book"} />}
-        onClose={() => setShowTopPicks(false)}
+        onClose={() => {
+          setShowTopPicks(false);
+          setClicked(false);
+        }}
       />
     );
 
@@ -182,6 +253,8 @@ function BooksMobile() {
             className='drawer'
             clicked={clicked}
             drawerText={"Swipe to filter your book preferences"}
+            filterMode={filterMode}
+            setFilterMode={setFilterMode}
           >
             <Accordion2
               filters={filters}

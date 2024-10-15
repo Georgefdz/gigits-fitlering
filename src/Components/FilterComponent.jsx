@@ -1,5 +1,6 @@
 import React from "react";
 import Select from "react-select";
+import CustomMultiValue from "./CustomMultiValue"; // Import the custom MultiValue
 import { customStyles } from "../utils/utils";
 
 // Helper function to create Select component
@@ -25,6 +26,7 @@ const createSelect = ({
     styles={customStyles}
     className='react-select-container'
     classNamePrefix='react-select'
+    components={{ MultiValue: CustomMultiValue }} // Use the custom MultiValue
   />
 );
 
@@ -34,7 +36,6 @@ const FilterComponent = ({
   uniqueSkills,
   uniqueConcepts,
   uniqueTypes,
-  uniqueTimes,
   uniqueLanguages,
   component,
 }) => {
@@ -55,12 +56,12 @@ const FilterComponent = ({
 
   const componentSpecificFilters = {
     Books: [
-      {
-        label: "Type",
-        name: "type",
-        options: uniqueTypes,
-        filterValue: filters.type,
-      },
+      // {
+      //   label: "Type",
+      //   name: "type",
+      //   options: uniqueTypes,
+      //   filterValue: filters.type,
+      // },
     ],
     Podcasts: [
       {
@@ -69,13 +70,23 @@ const FilterComponent = ({
         options: uniqueLanguages,
         filterValue: filters.language,
       },
+      // {
+      //   label: "Type",
+      //   name: "type",
+      //   options: uniqueTypes,
+      //   filterValue: filters.type,
+      // },
     ],
   };
 
   const renderFilters = (filterData) =>
     filterData.map(({ label, name, options, filterValue }) => (
-      <label key={name}>
-        {label}:
+      <div key={name} style={{ marginBottom: "16px" }}>
+        <label
+          style={{ display: "block", marginBottom: "8px", color: "white" }}
+        >
+          {label}:
+        </label>
         {createSelect({
           name,
           options,
@@ -83,7 +94,7 @@ const FilterComponent = ({
           handleFilterChange,
           customStyles,
         })}
-      </label>
+      </div>
     ));
 
   return (

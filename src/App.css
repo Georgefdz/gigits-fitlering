@@ -138,15 +138,14 @@ label > select {
 
 .filter-container {
   display: flex;
-}
-
-.filter-container > label {
-  font-size: 18px;
+  width: 100%;
+  justify-content: center;
+  gap: 50px;
 }
 
 .react-select__control {
-  width: 250px;
-  font-size: 16px;
+  max-width: 250px; /* Adjust as needed */
+  width: 100%;
 }
 
 .react-select__menu {
@@ -497,10 +496,6 @@ label > select {
 
   .podcast2 {
     width: 145px;
-  }
-
-  .filter-container {
-    display: none;
   }
 
   body {

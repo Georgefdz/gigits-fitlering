@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useEffect } from "react";
+// Drawer2.jsx
+import React, { useEffect } from "react";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
@@ -7,11 +7,6 @@ import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 const drawerBleeding = 56;
-
-const Root = styled("div")(({ theme }) => ({
-  backgroundColor: "var(--main-bg-color);",
-  ...theme.applyStyles("dark", {}),
-}));
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "var(--main-bg-color);",
@@ -33,7 +28,15 @@ const Puller = styled("div")(({ theme }) => ({
   }),
 }));
 
-function Drawer2({ children, drawerText, clicked, ...props }) {
+function Drawer2({
+  children,
+  drawerText,
+  clicked,
+  filterMode,
+  setFilterMode,
+  allFilterOptions,
+  ...props
+}) {
   const { window } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -49,6 +52,10 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  const handleFilterModeChange = (mode) => {
+    setFilterMode(mode);
+  };
 
   return (
     <>
@@ -73,14 +80,52 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
           keepMounted: true,
         }}
       >
-        <div className='upperCheckboxes'>
-          <label>
-            <input type='checkbox' name='' id='' />
-            At least 1 selected criteria
+        {/* Radio Buttons for Filter Mode */}
+        <div
+          className='filterModeContainer'
+          style={{
+            display: "flex",
+            padding: "5px",
+            backgroundColor: "rgb(32, 32, 32)",
+            justifyContent: "space-around",
+            borderRight: ".5px solid rgb(118, 179, 157)",
+            borderLeft: ".5px solid rgb(118, 179, 157)",
+          }}
+        >
+          <label
+            style={{
+              marginBottom: "8px",
+              color: "white",
+              backgroundColor: "rgb(32, 32, 32)",
+              fontSize: "12px",
+            }}
+          >
+            <input
+              type='radio'
+              name='filterMode'
+              value='all'
+              checked={filterMode === "all"}
+              onChange={() => handleFilterModeChange("all")}
+              style={{ marginRight: "8px" }}
+            />
+            All Selected Criteria
           </label>
-          <label>
-            <input type='checkbox' name='' id='' />
-            All selected criteria
+          <label
+            style={{
+              color: "white",
+              backgroundColor: "rgb(32, 32, 32)",
+              fontSize: "12px",
+            }}
+          >
+            <input
+              type='radio'
+              name='filterMode'
+              value='any'
+              checked={filterMode === "any"}
+              onChange={() => handleFilterModeChange("any")}
+              style={{ marginRight: "8px" }}
+            />
+            At Least 1 Selected Criteria
           </label>
         </div>
         <StyledBox

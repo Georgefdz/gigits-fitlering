@@ -19,6 +19,8 @@ function PodcastsMobile() {
     skill: [],
     concept: [],
     language: [],
+    type: [],
+    time: [],
   });
   const [uniqueSkills, setUniqueSkills] = useState([]);
   const [uniqueConcepts, setUniqueConcepts] = useState([]);
@@ -29,6 +31,9 @@ function PodcastsMobile() {
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
+
+  // New state for filter mode
+  const [filterMode, setFilterMode] = useState("all"); // 'all' or 'any'
 
   const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -49,14 +54,24 @@ function PodcastsMobile() {
             return {
               id: record.id,
               name: fields.Name || "",
-              skill: fields["Skill not taught in School"] || [],
-              concept: fields["Key Concept"] || [],
-              time: fields["Time to Finish"] || [],
-              type: fields.Type || [],
+              skill: fields["Skill not taught in School"]
+                ? fields["Skill not taught in School"].map((s) =>
+                    s.toLowerCase()
+                  )
+                : [],
+              concept: fields["Key Concept"]
+                ? fields["Key Concept"].map((c) => c.toLowerCase())
+                : [],
+              language: fields.Language
+                ? fields.Language.map((l) => l.toLowerCase())
+                : [],
+              time: fields["Time to Finish"]
+                ? fields["Time to Finish"].map((t) => t.toLowerCase())
+                : [],
+              type: fields.Type ? fields.Type.map((t) => t.toLowerCase()) : [],
               description: fields["Description"] || "",
               spotifyUrl: fields["Link to Reco"] || "",
               topScore: fields["Top"] || 0,
-              language: fields.Language || [],
             };
           });
 
@@ -101,39 +116,100 @@ function PodcastsMobile() {
       );
   }, []);
 
+  // Effect to handle filterMode changes
+  useEffect(() => {
+    if (filterMode === "all") {
+      // When "All Selected Criteria" is selected, set all filters to include all options
+      setFilters({
+        skill: [...uniqueSkills],
+        concept: [...uniqueConcepts],
+        language: [...uniqueLanguages],
+        type: [...uniqueTypes],
+        time: [...uniqueTimes],
+      });
+    } else if (filterMode === "any") {
+      // When "At Least 1 Selected Criteria" is selected, clear all filters
+      setFilters({
+        skill: [],
+        concept: [],
+        language: [],
+        type: [],
+        time: [],
+      });
+    }
+  }, [
+    filterMode,
+    uniqueSkills,
+    uniqueConcepts,
+    uniqueLanguages,
+    uniqueTypes,
+    uniqueTimes,
+  ]);
+
   const handleFilterChange = (selectedOptions, { name }) => {
     let selectedValues = [];
     if (Array.isArray(selectedOptions)) {
-      if (typeof selectedOptions[0] === "string") {
+      if (
+        selectedOptions.length > 0 &&
+        typeof selectedOptions[0] === "string"
+      ) {
         // From mobile (CheckboxGroup)
-        selectedValues = selectedOptions;
-      } else {
+        selectedValues = selectedOptions.map((opt) => opt.toLowerCase());
+      } else if (selectedOptions.length > 0 && selectedOptions[0].value) {
         // From desktop (React Select)
-        selectedValues = selectedOptions.map((option) => option.value);
+        selectedValues = selectedOptions.map((option) =>
+          option.value.toLowerCase()
+        );
       }
     }
 
-    setFilters({
-      ...filters,
+    setFilters((prevFilters) => ({
+      ...prevFilters,
       [name]: selectedValues,
-    });
+    }));
   };
 
+  // Update filteredRecords based on filterMode and filters
   useEffect(() => {
-    const filtered = records.filter((record) => {
-      const matchesArray = (array, filter) =>
-        filter.length === 0 ||
-        array.some((value) => filter.includes(value.trim().toLowerCase()));
+    if (filterMode === "all") {
+      // "All Selected Criteria" mode: AND logic across filter categories
+      const filtered = records.filter((record) => {
+        return Object.keys(filters).every((category) => {
+          const selected = filters[category];
+          if (selected.length === 0) return true; // No filters in this category
 
-      return (
-        matchesArray(record.skill, filters.skill) &&
-        matchesArray(record.concept, filters.concept) &&
-        matchesArray(record.language, filters.language)
+          // Check if the record matches at least one selected option in this category
+          return record[category].some((item) =>
+            selected.includes(item.toLowerCase())
+          );
+        });
+      });
+      setFilteredRecords(filtered);
+    } else if (filterMode === "any") {
+      // "At Least 1 Selected Criteria" mode: OR logic across all filter categories
+      const hasAnyFilterSelected = Object.values(filters).some(
+        (filterArray) => filterArray.length > 0
       );
-    });
 
-    setFilteredRecords(filtered);
-  }, [filters, records]);
+      if (!hasAnyFilterSelected) {
+        setFilteredRecords([]); // No filters selected, show nothing
+        return;
+      }
+
+      const filtered = records.filter((record) => {
+        return Object.keys(filters).some((category) => {
+          const selected = filters[category];
+          if (selected.length === 0) return false; // No filters in this category
+
+          // Check if the record matches at least one selected option in this category
+          return record[category].some((item) =>
+            selected.includes(item.toLowerCase())
+          );
+        });
+      });
+      setFilteredRecords(filtered);
+    }
+  }, [filters, records, filterMode]);
 
   const closeDrawer = () => {
     setClicked(true);
@@ -164,44 +240,17 @@ function PodcastsMobile() {
     });
   };
 
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      backgroundColor: "transparent",
-      border: "2px solid #76b39d",
-      borderRadius: "12px",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "rgb(6, 144, 103)" : "transparent",
-      color: state.isSelected ? "rgb(6, 144, 103)" : "white",
-      ":hover": {
-        backgroundColor: "#76b39d",
-      },
-    }),
-    multiValue: (provided) => ({
-      ...provided,
-      backgroundColor: "#76b39d",
-      borderRadius: "4px",
-    }),
-    menu: (provided) => ({
-      ...provided,
-      backgroundColor: "transparent",
-      border: "2px solid #76b39d",
-    }),
-  };
-
   const convertToEmbedUrl = (url) => {
     if (!url) {
       console.log("No URL provided");
       return "";
     }
     const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1];
-    console.log("Extracted Spotify Episode ID:", episodeId);
+    // console.log("Extracted Spotify Episode ID:", episodeId);
     const embedUrl = episodeId
       ? `https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator`
       : "";
-    console.log("Final Embed URL:", embedUrl);
+    // console.log("Final Embed URL:", embedUrl);
     return embedUrl;
   };
 
@@ -209,7 +258,7 @@ function PodcastsMobile() {
     if (filteredRecords.length === 0) return;
     const randomIndex = Math.floor(Math.random() * filteredRecords.length);
     const randomPodcast = filteredRecords[randomIndex];
-    console.log("Random Podcast selected:", randomPodcast);
+    // console.log("Random Podcast selected:", randomPodcast);
 
     const embedUrl = convertToEmbedUrl(randomPodcast.spotifyUrl);
 
@@ -228,8 +277,6 @@ function PodcastsMobile() {
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
               uniqueTypes={uniqueTypes}
-              uniqueTimes={uniqueTimes}
-              customStyles={customStyles}
               uniqueLanguages={uniqueLanguages}
               component='Podcasts'
             />
@@ -351,12 +398,17 @@ function PodcastsMobile() {
             className='drawer'
             clicked={clicked}
             drawerText={"Swipe to filter your podcast preferences"}
+            filterMode={filterMode} // Pass filterMode
+            setFilterMode={setFilterMode} // Pass setFilterMode
           >
             <Accordion2
               filters={filters}
               handleFilterChange={handleFilterChange}
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
+              uniqueTypes={uniqueTypes}
+              uniqueTimes={uniqueTimes}
+              uniqueLanguages={uniqueLanguages}
             />
             <div className={styles.buttonContainer}>
               <button

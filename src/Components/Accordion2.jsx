@@ -5,8 +5,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckboxGroup from "./CheckboxGroup";
 
-const matchh = ["at least 1 selected criteria", "all selected criteria"];
-
 function Accordion2({
   filters,
   handleFilterChange,
@@ -17,14 +15,6 @@ function Accordion2({
 }) {
   return (
     <div style={{ paddingTop: "20px" }}>
-      {/* <span>Show items that match: </span>
-      <CheckboxGroup
-        options={matchh}
-        selectedOptions={matchh[0]}
-        name='matchh'
-        className={"formGroup"}
-      /> */}
-
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -68,7 +58,7 @@ function Accordion2({
           />
         </AccordionDetails>
       </Accordion>
-      {uniqueTimes && (
+      {uniqueTimes && uniqueTimes.length > 0 && (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -90,7 +80,7 @@ function Accordion2({
           </AccordionDetails>
         </Accordion>
       )}
-      {uniqueTypes && (
+      {uniqueTypes && uniqueTypes.length > 0 && (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}

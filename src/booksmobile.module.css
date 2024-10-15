@@ -9,6 +9,9 @@
 
 .filterContainer {
   grid-column: 1 / 4;
+  grid-row: 1 / 2;
+  width: 100%;
+  justify-content: center;
 }
 
 .bookSide {
@@ -31,8 +34,10 @@
 
 .buttonContainer {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding-top: 10px;
+  height: 100px;
 }
 
 .button {
@@ -66,6 +71,11 @@
     margin-top: 20px;
     padding: 0px 20px;
     display: block;
+  }
+
+  .buttonContainer {
+    flex-direction: row;
+    height: 50px;
   }
 }
 

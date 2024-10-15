@@ -17,6 +17,10 @@
   z-index: -1;
 }
 
+.filterComponentsContainer {
+  width: 100%;
+}
+
 .podContainer {
   overflow-y: scroll;
   height: 60dvh;

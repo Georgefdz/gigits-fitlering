@@ -1,27 +1,12 @@
-import * as React from "react";
-import { useEffect } from "react";
-import PropTypes from "prop-types";
+// Drawer2.jsx
+import React, { useEffect } from "react";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Accordion2 from "./Accordion2";
 
 const drawerBleeding = 56;
-
-const Root = styled("div")(({ theme }) => ({
-  //   height: "100%",
-  backgroundColor: "var(--main-bg-color);",
-  ...theme.applyStyles("dark", {
-    // backgroundColor: theme.palette.background.default,
-    // backgroundColor: "red",
-  }),
-}));
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "var(--main-bg-color);",
@@ -43,7 +28,15 @@ const Puller = styled("div")(({ theme }) => ({
   }),
 }));
 
-function Drawer2({ children, drawerText, clicked, ...props }) {
+function Drawer2({
+  children,
+  drawerText,
+  clicked,
+  filterMode,
+  setFilterMode,
+  allFilterOptions,
+  ...props
+}) {
   const { window } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -57,9 +50,12 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
     setOpen(newOpen);
   };
 
-  // This is used only for the example
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  const handleFilterModeChange = (mode) => {
+    setFilterMode(mode);
+  };
 
   return (
     <>
@@ -72,9 +68,6 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
           ".MuiDrawer-root": {},
         }}
       />
-      {/* <Box sx={{ textAlign: "center", pt: 1 }}>
-        <Button onClick={toggleDrawer(true)}>Open</Button>
-      </Box> */}
       <SwipeableDrawer
         container={container}
         anchor='bottom'
@@ -87,14 +80,52 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
           keepMounted: true,
         }}
       >
-        <div className='upperCheckboxes'>
-          <label>
-            <input type='checkbox' name='' id='' />
-            At least 1 selected criteria
+        {/* Radio Buttons for Filter Mode */}
+        <div
+          className='filterModeContainer'
+          style={{
+            display: "flex",
+            padding: "5px",
+            backgroundColor: "rgb(32, 32, 32)",
+            justifyContent: "space-around",
+            borderRight: ".5px solid rgb(118, 179, 157)",
+            borderLeft: ".5px solid rgb(118, 179, 157)",
+          }}
+        >
+          <label
+            style={{
+              marginBottom: "8px",
+              color: "white",
+              backgroundColor: "rgb(32, 32, 32)",
+              fontSize: "12px",
+            }}
+          >
+            <input
+              type='radio'
+              name='filterMode'
+              value='all'
+              checked={filterMode === "all"}
+              onChange={() => handleFilterModeChange("all")}
+              style={{ marginRight: "8px" }}
+            />
+            All Selected Criteria
           </label>
-          <label>
-            <input type='checkbox' name='' id='' />
-            All selected criteria
+          <label
+            style={{
+              color: "white",
+              backgroundColor: "rgb(32, 32, 32)",
+              fontSize: "12px",
+            }}
+          >
+            <input
+              type='radio'
+              name='filterMode'
+              value='any'
+              checked={filterMode === "any"}
+              onChange={() => handleFilterModeChange("any")}
+              style={{ marginRight: "8px" }}
+            />
+            At Least 1 Selected Criteria
           </label>
         </div>
         <StyledBox
@@ -123,16 +154,6 @@ function Drawer2({ children, drawerText, clicked, ...props }) {
               display: "flex",
             }}
           >
-            {/* <FilterAltIcon
-              sx={{
-                fontSize: 28,
-                fill: "none",
-                stroke: "#76b39d",
-                strokeWidth: 2,
-              }}
-            />{" "}
-            Filter */}
-
             {drawerText}
           </Typography>
         </StyledBox>

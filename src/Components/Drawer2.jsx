@@ -124,7 +124,7 @@ function Drawer2({
               onChange={() => handleFilterModeChange("any")}
               style={{ marginRight: "8px" }}
             />
-            At Least 1 Selected Criteria
+            Narrow Down
           </label>
         </div>
         <StyledBox

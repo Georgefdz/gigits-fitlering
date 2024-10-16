@@ -398,15 +398,15 @@ function PodcastsMobile() {
             className='drawer'
             clicked={clicked}
             drawerText={"Swipe to filter your podcast preferences"}
-            filterMode={filterMode} // Pass filterMode
-            setFilterMode={setFilterMode} // Pass setFilterMode
+            filterMode={filterMode}
+            setFilterMode={setFilterMode}
           >
             <Accordion2
               filters={filters}
               handleFilterChange={handleFilterChange}
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
-              uniqueTypes={uniqueTypes}
+              // uniqueTypes={uniqueTypes}
               uniqueTimes={uniqueTimes}
               uniqueLanguages={uniqueLanguages}
             />

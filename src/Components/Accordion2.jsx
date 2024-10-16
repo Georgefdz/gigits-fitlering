@@ -12,6 +12,7 @@ function Accordion2({
   uniqueConcepts,
   uniqueTypes,
   uniqueTimes,
+  uniqueLanguages,
 }) {
   return (
     <div style={{ paddingTop: "20px" }}>
@@ -58,7 +59,29 @@ function Accordion2({
           />
         </AccordionDetails>
       </Accordion>
-      {uniqueTimes && uniqueTimes.length > 0 && (
+      {uniqueLanguages && uniqueLanguages.length > 0 && (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls='panel3-content'
+            id='panel3-header'
+            sx={{ backgroundColor: "#f4f4f4", borderRadius: "10px" }}
+          >
+            Language
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{ backgroundColor: "#f4f4f4", marginTop: "-20px" }}
+          >
+            <CheckboxGroup
+              options={uniqueLanguages}
+              selectedOptions={filters.language}
+              onChange={handleFilterChange}
+              name='language'
+            />
+          </AccordionDetails>
+        </Accordion>
+      )}
+      {/* {uniqueTimes && uniqueTimes.length > 0 && (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -79,8 +102,8 @@ function Accordion2({
             />
           </AccordionDetails>
         </Accordion>
-      )}
-      {uniqueTypes && uniqueTypes.length > 0 && (
+      )} */}
+      {/* {uniqueTypes && uniqueTypes.length > 0 && (
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -101,7 +124,7 @@ function Accordion2({
             />
           </AccordionDetails>
         </Accordion>
-      )}
+      )} */}
     </div>
   );
 }

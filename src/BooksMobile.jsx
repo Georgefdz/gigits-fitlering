@@ -17,10 +17,12 @@ function BooksMobile() {
   const [filters, setFilters] = useState({
     skill: [],
     concept: [],
+    language: [],
     type: [],
   });
   const [uniqueSkills, setUniqueSkills] = useState([]);
   const [uniqueConcepts, setUniqueConcepts] = useState([]);
+  const [uniqueLanguages, setUniqueLanguages] = useState([]);
   const [uniqueTypes, setUniqueTypes] = useState([]);
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -46,6 +48,7 @@ function BooksMobile() {
           setTopPicks(getTopPicks(formattedRecords));
           setUniqueSkills(extractUniqueValues(formattedRecords, "skill"));
           setUniqueConcepts(extractUniqueValues(formattedRecords, "concept"));
+          setUniqueLanguages(extractUniqueValues(formattedRecords, "language"));
           setUniqueTypes(extractUniqueValues(formattedRecords, "type"));
           fetchNextPage();
         },
@@ -67,6 +70,9 @@ function BooksMobile() {
           : [],
         concept: fields["Key Concepts"]
           ? fields["Key Concepts"].map((c) => c.toLowerCase())
+          : [],
+        language: fields.Language
+          ? fields.Language.map((l) => l.toLowerCase())
           : [],
         type: fields.Type ? fields.Type.map((t) => t.toLowerCase()) : [],
         recoImg: fields.Portadas?.[0]?.url || null,
@@ -101,6 +107,7 @@ function BooksMobile() {
       setFilters({
         skill: [...uniqueSkills],
         concept: [...uniqueConcepts],
+        language: [...uniqueLanguages],
         type: [...uniqueTypes],
       });
     } else if (filterMode === "any") {
@@ -108,10 +115,11 @@ function BooksMobile() {
       setFilters({
         skill: [],
         concept: [],
+        language: [],
         type: [],
       });
     }
-  }, [filterMode, uniqueSkills, uniqueConcepts, uniqueTypes]);
+  }, [filterMode, uniqueSkills, uniqueConcepts, uniqueLanguages, uniqueTypes]);
 
   const handleFilterChange = (selectedOptions, { name }) => {
     let selectedValues = [];
@@ -264,6 +272,7 @@ function BooksMobile() {
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
               uniqueTypes={uniqueTypes}
+              uniqueLanguages={uniqueLanguages}
             />
             {renderButtons()}
           </Drawer>
@@ -280,6 +289,7 @@ function BooksMobile() {
                 uniqueSkills={uniqueSkills}
                 uniqueConcepts={uniqueConcepts}
                 uniqueTypes={uniqueTypes}
+                uniqueLanguages={uniqueLanguages}
                 component='Books'
               />
             </div>

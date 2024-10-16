@@ -52,6 +52,12 @@ const FilterComponent = ({
       options: uniqueConcepts,
       filterValue: filters.concept,
     },
+    {
+      label: "Language",
+      name: "language",
+      options: uniqueLanguages,
+      filterValue: filters.language,
+    },
   ];
 
   const componentSpecificFilters = {
@@ -64,12 +70,12 @@ const FilterComponent = ({
       // },
     ],
     Podcasts: [
-      {
-        label: "Language",
-        name: "language",
-        options: uniqueLanguages,
-        filterValue: filters.language,
-      },
+      // {
+      //   label: "Language",
+      //   name: "language",
+      //   options: uniqueLanguages,
+      //   filterValue: filters.language,
+      // },
       // {
       //   label: "Type",
       //   name: "type",

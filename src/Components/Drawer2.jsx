@@ -1,4 +1,3 @@
-// Drawer2.jsx
 import React, { useEffect } from "react";
 import { Global } from "@emotion/react";
 import { styled } from "@mui/material/styles";

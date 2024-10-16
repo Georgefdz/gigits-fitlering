@@ -194,6 +194,8 @@ function BooksMobile() {
         oneLiner={selectedBook.oneLiner}
         cover={selectedBook.recoImg}
         link={selectedBook.link}
+        skills={selectedBook.skill}
+        concepts={selectedBook.concept}
         onClose={() => {
           setSelectedBook(null);
           setClicked(false);

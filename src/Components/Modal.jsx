@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import SpotifyPlayer from "./SpotifyPlayer.jsx";
 import PlusCircle from "./PlusCircle.jsx";
 import styles from "./modal.module.css";
+import { motion } from "framer-motion";
 
 function Modal({
   title,
@@ -53,7 +54,12 @@ function Modal({
         >
           <SpotifyPlayer url={spotifyUrl} />
           <h3>{description}</h3>
-          <div className={styles.tagsContainer}>
+          <motion.div
+            animate={{ x: ["20%", "-100%"] }}
+            initial={{ x: "0%" }}
+            transition={{ ease: "linear", duration: 8, repeat: Infinity }}
+            className={styles.tagsContainer}
+          >
             <p>{time}</p>
             {skills.map((skill) => (
               <p key={skill}>{skill}</p>
@@ -61,7 +67,7 @@ function Modal({
             {concepts.map((concept) => (
               <p key={concept}>{concept}</p>
             ))}
-          </div>
+          </motion.div>
 
           <div className={styles.bottomSpan}>
             <a
@@ -99,6 +105,19 @@ function Modal({
             <h2>Author: {author}</h2>
             <h3>{oneLiner}</h3>
           </div>
+          {/* <motion.div
+            animate={{ x: ["20%", "-100%"] }}
+            initial={{ x: "0%" }}
+            transition={{ ease: "linear", duration: 8, repeat: Infinity }}
+            className={styles.tagsContainer}
+          >
+            {skills.map((skill) => (
+              <p key={skill}>{skill}</p>
+            ))}
+            {concepts.map((concept) => (
+              <p key={concept}>{concept}</p>
+            ))}
+          </motion.div> */}
           <div className={styles.bottomSpan}>
             <a
               href='https://gigits.io'

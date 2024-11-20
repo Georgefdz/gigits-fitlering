@@ -31,14 +31,12 @@ function PodcastsMobile() {
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
-
-  // New state for filter mode
-  const [filterMode, setFilterMode] = useState("all"); // 'all' or 'any'
+  const [filterMode, setFilterMode] = useState("all");
 
   const API_KEY = import.meta.env.VITE_API_KEY;
-
   const { width } = useWindowSize();
 
+  // Initial data fetch
   useEffect(() => {
     const base = new Airtable({ apiKey: API_KEY }).base("appz3L59vDo6XArUw");
 
@@ -78,7 +76,6 @@ function PodcastsMobile() {
           setRecords(formattedRecords);
           setFilteredRecords(formattedRecords);
 
-          // Filter the top 10 podcasts based on the "Top" field
           const topPodcasts = formattedRecords
             .filter((record) => record.topScore && !isNaN(record.topScore))
             .sort((a, b) => b.topScore - a.topScore)
@@ -86,7 +83,6 @@ function PodcastsMobile() {
 
           setTopPicks(topPodcasts);
 
-          // Extract unique values for each filter field
           const extractUniqueValues = (records, field) => {
             const valueSet = new Set();
             records.forEach((record) => {
@@ -106,6 +102,18 @@ function PodcastsMobile() {
           setUniqueTimes(extractUniqueValues(formattedRecords, "time"));
           setUniqueLanguages(extractUniqueValues(formattedRecords, "language"));
 
+          // After setting unique values, set initial filters if in "all" mode
+          if (filterMode === "all") {
+            setFilters({
+              skill: extractUniqueValues(formattedRecords, "skill"),
+              concept: extractUniqueValues(formattedRecords, "concept"),
+              language: extractUniqueValues(formattedRecords, "language"),
+              type: extractUniqueValues(formattedRecords, "type"),
+              time: [], // Start with empty time array
+            });
+            setSelectedTimes([]); // Start with no times selected
+          }
+
           fetchNextPage();
         },
         (err) => {
@@ -114,21 +122,20 @@ function PodcastsMobile() {
           }
         }
       );
-  }, []);
+  }, [filterMode]);
 
-  // Effect to handle filterMode changes
+  // Handle filter mode changes
   useEffect(() => {
     if (filterMode === "all") {
-      // When "All Selected Criteria" is selected, set all filters to include all options
       setFilters({
         skill: [...uniqueSkills],
         concept: [...uniqueConcepts],
         language: [...uniqueLanguages],
         type: [...uniqueTypes],
-        time: [...uniqueTimes],
+        time: [], // Start with empty time array
       });
+      setSelectedTimes([]); // Start with no times selected
     } else if (filterMode === "any") {
-      // When "At Least 1 Selected Criteria" is selected, clear all filters
       setFilters({
         skill: [],
         concept: [],
@@ -136,6 +143,7 @@ function PodcastsMobile() {
         type: [],
         time: [],
       });
+      setSelectedTimes([]);
     }
   }, [
     filterMode,
@@ -153,32 +161,55 @@ function PodcastsMobile() {
         selectedOptions.length > 0 &&
         typeof selectedOptions[0] === "string"
       ) {
-        // From mobile (CheckboxGroup)
         selectedValues = selectedOptions.map((opt) => opt.toLowerCase());
       } else if (selectedOptions.length > 0 && selectedOptions[0].value) {
-        // From desktop (React Select)
         selectedValues = selectedOptions.map((option) =>
           option.value.toLowerCase()
         );
       }
     }
 
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: selectedValues,
-    }));
+    setFilters((prevFilters) => {
+      const newFilters = {
+        ...prevFilters,
+        [name]: selectedValues,
+      };
+
+      // If this is a time filter change, sync it with selectedTimes
+      if (name === "time") {
+        setSelectedTimes(selectedValues);
+      }
+
+      return newFilters;
+    });
   };
 
-  // Update filteredRecords based on filterMode and filters
+  // Filtering logic
   useEffect(() => {
     if (filterMode === "all") {
-      // "All Selected Criteria" mode: AND logic across filter categories
+      const allFiltersEmpty = Object.values(filters).every(
+        (filterArray) => filterArray.length === 0
+      );
+
+      if (allFiltersEmpty) {
+        setFilteredRecords([]);
+        return;
+      }
+
       const filtered = records.filter((record) => {
         return Object.keys(filters).every((category) => {
           const selected = filters[category];
-          if (selected.length === 0) return true; // No filters in this category
+          if (selected.length === 0) return true;
 
-          // Check if the record matches at least one selected option in this category
+          // Special handling for time filter
+          if (category === "time") {
+            return selected.some((time) =>
+              record.time.some(
+                (recordTime) => recordTime.toLowerCase() === time.toLowerCase()
+              )
+            );
+          }
+
           return record[category].some((item) =>
             selected.includes(item.toLowerCase())
           );
@@ -186,22 +217,28 @@ function PodcastsMobile() {
       });
       setFilteredRecords(filtered);
     } else if (filterMode === "any") {
-      // "At Least 1 Selected Criteria" mode: OR logic across all filter categories
       const hasAnyFilterSelected = Object.values(filters).some(
         (filterArray) => filterArray.length > 0
       );
 
       if (!hasAnyFilterSelected) {
-        setFilteredRecords([]); // No filters selected, show nothing
+        setFilteredRecords([]);
         return;
       }
 
       const filtered = records.filter((record) => {
         return Object.keys(filters).some((category) => {
           const selected = filters[category];
-          if (selected.length === 0) return false; // No filters in this category
+          if (selected.length === 0) return false;
 
-          // Check if the record matches at least one selected option in this category
+          if (category === "time") {
+            return selected.some((time) =>
+              record.time.some(
+                (recordTime) => recordTime.toLowerCase() === time.toLowerCase()
+              )
+            );
+          }
+
           return record[category].some((item) =>
             selected.includes(item.toLowerCase())
           );
@@ -210,6 +247,22 @@ function PodcastsMobile() {
       setFilteredRecords(filtered);
     }
   }, [filters, records, filterMode]);
+
+  const handleTimeClick = (timeLabel) => {
+    setSelectedTimes((prevSelectedTimes) => {
+      const newSelectedTimes = prevSelectedTimes.includes(timeLabel)
+        ? prevSelectedTimes.filter((time) => time !== timeLabel)
+        : [...prevSelectedTimes, timeLabel];
+
+      // Sync with filters state
+      setFilters((prev) => ({
+        ...prev,
+        time: newSelectedTimes,
+      }));
+
+      return newSelectedTimes;
+    });
+  };
 
   const closeDrawer = () => {
     setClicked(true);
@@ -230,27 +283,14 @@ function PodcastsMobile() {
     { label: "+3 hours", style: styles.micSix, display: ">3\nhours" },
   ];
 
-  const handleTimeClick = (timeLabel) => {
-    setSelectedTimes((prevSelectedTimes) => {
-      if (prevSelectedTimes.includes(timeLabel)) {
-        return prevSelectedTimes.filter((time) => time !== timeLabel);
-      } else {
-        return [...prevSelectedTimes, timeLabel];
-      }
-    });
-  };
-
   const convertToEmbedUrl = (url) => {
     if (!url) {
-      console.log("No URL provided");
       return "";
     }
     const episodeId = url.match(/episode\/([a-zA-Z0-9]+)/)?.[1];
-    // console.log("Extracted Spotify Episode ID:", episodeId);
     const embedUrl = episodeId
       ? `https://open.spotify.com/embed/episode/${episodeId}?utm_source=generator`
       : "";
-    // console.log("Final Embed URL:", embedUrl);
     return embedUrl;
   };
 
@@ -258,10 +298,7 @@ function PodcastsMobile() {
     if (filteredRecords.length === 0) return;
     const randomIndex = Math.floor(Math.random() * filteredRecords.length);
     const randomPodcast = filteredRecords[randomIndex];
-    // console.log("Random Podcast selected:", randomPodcast);
-
     const embedUrl = convertToEmbedUrl(randomPodcast.spotifyUrl);
-
     setSelectedPodcast({ ...randomPodcast, spotifyUrl: embedUrl });
   };
 
@@ -406,7 +443,6 @@ function PodcastsMobile() {
               handleFilterChange={handleFilterChange}
               uniqueSkills={uniqueSkills}
               uniqueConcepts={uniqueConcepts}
-              // uniqueTypes={uniqueTypes}
               uniqueTimes={uniqueTimes}
               uniqueLanguages={uniqueLanguages}
             />

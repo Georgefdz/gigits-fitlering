@@ -27,14 +27,11 @@ function BooksMobile() {
   const [showTopPicks, setShowTopPicks] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
-
-  // New state for filter mode
-  const [filterMode, setFilterMode] = useState("all"); // 'all' or 'any'
+  const [filterMode, setFilterMode] = useState("all");
 
   const { width } = useWindowSize();
   const API_KEY = import.meta.env.VITE_API_KEY;
 
-  // Fetch Airtable records and initialize filters
   useEffect(() => {
     const base = new Airtable({ apiKey: API_KEY }).base("appz3L59vDo6XArUw");
 
@@ -46,10 +43,27 @@ function BooksMobile() {
           setRecords(formattedRecords);
           setFilteredRecords(formattedRecords);
           setTopPicks(getTopPicks(formattedRecords));
-          setUniqueSkills(extractUniqueValues(formattedRecords, "skill"));
-          setUniqueConcepts(extractUniqueValues(formattedRecords, "concept"));
-          setUniqueLanguages(extractUniqueValues(formattedRecords, "language"));
-          setUniqueTypes(extractUniqueValues(formattedRecords, "type"));
+
+          const skills = extractUniqueValues(formattedRecords, "skill");
+          const concepts = extractUniqueValues(formattedRecords, "concept");
+          const languages = extractUniqueValues(formattedRecords, "language");
+          const types = extractUniqueValues(formattedRecords, "type");
+
+          setUniqueSkills(skills);
+          setUniqueConcepts(concepts);
+          setUniqueLanguages(languages);
+          setUniqueTypes(types);
+
+          // Set initial filters for "all" mode
+          if (filterMode === "all") {
+            setFilters({
+              skill: skills,
+              concept: concepts,
+              language: languages,
+              type: types,
+            });
+          }
+
           fetchNextPage();
         },
         (err) => {
@@ -58,7 +72,6 @@ function BooksMobile() {
       );
   }, []);
 
-  // Format Airtable records
   const formatRecords = (records) =>
     records.map((record) => {
       const fields = record.fields || {};
@@ -100,10 +113,8 @@ function BooksMobile() {
     return Array.from(valueSet).sort();
   };
 
-  // Effect to handle filterMode changes
   useEffect(() => {
     if (filterMode === "all") {
-      // When "All Selected Criteria" is selected, set all filters to include all options
       setFilters({
         skill: [...uniqueSkills],
         concept: [...uniqueConcepts],
@@ -111,7 +122,6 @@ function BooksMobile() {
         type: [...uniqueTypes],
       });
     } else if (filterMode === "any") {
-      // When "At Least 1 Selected Criteria" is selected, clear all filters
       setFilters({
         skill: [],
         concept: [],
@@ -128,32 +138,56 @@ function BooksMobile() {
         selectedOptions.length > 0 &&
         typeof selectedOptions[0] === "string"
       ) {
-        // From mobile (CheckboxGroup)
         selectedValues = selectedOptions.map((opt) => opt.toLowerCase());
       } else if (selectedOptions.length > 0 && selectedOptions[0].value) {
-        // From desktop (React Select)
         selectedValues = selectedOptions.map((option) =>
           option.value.toLowerCase()
         );
       }
     }
 
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: selectedValues,
-    }));
+    setFilters((prevFilters) => {
+      const newFilters = {
+        ...prevFilters,
+        [name]: selectedValues,
+      };
+
+      // Check if all filter arrays are empty in the new state
+      const allFiltersEmpty = Object.values(newFilters).every(
+        (filterArray) => filterArray.length === 0
+      );
+
+      // If we're in "all" mode and all filters are empty, return completely empty filters
+      if (filterMode === "all" && allFiltersEmpty) {
+        return {
+          skill: [],
+          concept: [],
+          language: [],
+          type: [],
+        };
+      }
+
+      return newFilters;
+    });
   };
 
-  // Update filteredRecords based on filterMode and filters
   useEffect(() => {
     if (filterMode === "all") {
-      // "All Selected Criteria" mode: AND logic across filter categories
+      // Check if all filter arrays are empty
+      const allFiltersEmpty = Object.values(filters).every(
+        (filterArray) => filterArray.length === 0
+      );
+
+      if (allFiltersEmpty) {
+        setFilteredRecords([]);
+        return;
+      }
+
       const filtered = records.filter((record) => {
         return Object.keys(filters).every((category) => {
           const selected = filters[category];
-          if (selected.length === 0) return true; // No filters in this category
+          if (selected.length === 0) return true;
 
-          // Check if the record matches at least one selected option in this category
           return record[category].some((item) =>
             selected.includes(item.toLowerCase())
           );
@@ -161,22 +195,20 @@ function BooksMobile() {
       });
       setFilteredRecords(filtered);
     } else if (filterMode === "any") {
-      // "At Least 1 Selected Criteria" mode: OR logic across all filter categories
       const hasAnyFilterSelected = Object.values(filters).some(
         (filterArray) => filterArray.length > 0
       );
 
       if (!hasAnyFilterSelected) {
-        setFilteredRecords([]); // No filters selected, show nothing
+        setFilteredRecords([]);
         return;
       }
 
       const filtered = records.filter((record) => {
         return Object.keys(filters).some((category) => {
           const selected = filters[category];
-          if (selected.length === 0) return false; // No filters in this category
+          if (selected.length === 0) return false;
 
-          // Check if the record matches at least one selected option in this category
           return record[category].some((item) =>
             selected.includes(item.toLowerCase())
           );
@@ -187,10 +219,10 @@ function BooksMobile() {
   }, [filters, records, filterMode]);
 
   const suggestRandomBook = () => {
+    if (filteredRecords.length === 0) return;
     const randomBook =
       filteredRecords[Math.floor(Math.random() * filteredRecords.length)];
     setSelectedBook(randomBook);
-    // setClicked(false);
   };
 
   const closeDrawer = () => setClicked(true);

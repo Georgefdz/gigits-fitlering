@@ -205,12 +205,16 @@ function BooksMobile() {
       }
 
       const filtered = records.filter((record) => {
-        return Object.keys(filters).some((category) => {
+        // Use AND logic across all categories
+        return Object.keys(filters).every((category) => {
           const selected = filters[category];
-          if (selected.length === 0) return false;
+          if (selected.length === 0) return true; // Skip empty categories
 
-          return record[category].some((item) =>
-            selected.includes(item.toLowerCase())
+          // AND logic - all selected options in this category must be present
+          return selected.every((selectedItem) =>
+            record[category].some(
+              (item) => item.toLowerCase() === selectedItem.toLowerCase()
+            )
           );
         });
       });

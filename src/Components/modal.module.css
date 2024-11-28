@@ -93,14 +93,6 @@
   font-weight: 400;
 }
 
-.bottomSpan {
-  align-items: center;
-  display: flex;
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
-}
-
 .leftSide {
   display: flex;
   grid-column: 1 / 2;
@@ -191,7 +183,7 @@
   align-items: center;
 }
 
-.tagsContainer {
+/* .tagsContainer {
   display: flex;
   flex-direction: row;
   row-gap: 5px;
@@ -203,6 +195,38 @@
   background-color: #76b39d;
   border-radius: 12px;
   padding: 0px 5px;
+} */
+.tagsWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+  height: 55px; /* Fixed height to prevent jumping */
+}
+
+.tagsContainer {
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tagGroup {
+  display: flex;
+  gap: 10px;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+.tagGroup p {
+  background-color: #76b39d;
+  border-radius: 12px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 @media (max-width: 768px) {
@@ -225,47 +249,33 @@
     position: relative;
   }
 
-  .leftSide {
-    display: flex;
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
   .imageContainer {
     width: 150px;
+    max-height: 200px;
     display: flex;
     justify-content: center;
-    object-fit: cover;
   }
 
   .imageContainer img {
     width: 100%;
-    height: 100%;
-  }
-
-  .rightSide {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+    height: auto;
+    object-fit: cover;
   }
 
   .modalBook {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 90vw;
     padding: 15px;
     min-height: 55dvh;
-    max-height: 60dvh;
+    max-height: 90dvh;
     position: relative;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    overflow-x: hidden;
+    align-items: center;
   }
   .modalBook h2 {
-    margin-top: 20px;
+    margin: 5px 0px;
     font-size: 14px;
     font-weight: 400;
   }
@@ -278,15 +288,21 @@
     font-weight: 400;
   }
 
+  .modalBook h3 {
+    margin: 5px 0px;
+    max-height: 90px;
+    overflow-y: scroll;
+  }
+
   .modalPod h3 {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     max-height: 90px;
     /* border: 1px solid red; */
     overflow-y: scroll;
   }
 
   .modalBook button {
-    margin-top: 20px;
+    margin: 10px 0px 5px 0px;
     height: 30px;
     width: 140px;
     color: white;
@@ -312,11 +328,12 @@
   }
 
   .bottomSpan {
+    width: 100%;
+    justify-content: flex-end;
     align-items: center;
     display: flex;
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
+    position: static;
+    margin: 10px 0px 0px 0px;
   }
 
   .bottomSpan a {

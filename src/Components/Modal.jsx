@@ -4,6 +4,7 @@ import SpotifyPlayer from "./SpotifyPlayer.jsx";
 import PlusCircle from "./PlusCircle.jsx";
 import styles from "./modal.module.css";
 import { motion } from "framer-motion";
+import { ContactEmergency } from "@mui/icons-material";
 
 function Modal({
   title,
@@ -19,8 +20,48 @@ function Modal({
   skills,
   concepts,
 }) {
-  // console.log("Modal spotifyUrl:", spotifyUrl);
   const modalRef = useRef(null);
+
+  const TagScroll = ({ time, skills, concepts }) => {
+    const containerRef = useRef(null);
+    const [containerWidth, setContainerWidth] = React.useState(0);
+
+    useEffect(() => {
+      if (containerRef.current) {
+        const tagGroupWidth = containerRef.current.scrollWidth;
+        setContainerWidth(tagGroupWidth);
+      }
+    }, []);
+
+    const tags = [...(time ? [time] : []), ...skills, ...concepts];
+
+    return (
+      <div className={styles.tagsWrapper}>
+        <motion.div
+          className={styles.tagsContainer}
+          animate={{
+            x: [0, -containerWidth / 2],
+          }}
+          transition={{
+            duration: 15,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        >
+          <div className={styles.tagGroup} ref={containerRef}>
+            {tags.map((tag, index) => (
+              <p key={`${tag}-1`}>{tag}</p>
+            ))}
+          </div>
+          <div className={styles.tagGroup}>
+            {tags.map((tag, index) => (
+              <p key={`${tag}-2`}>{tag}</p>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,7 +95,9 @@ function Modal({
         >
           <SpotifyPlayer url={spotifyUrl} />
           <h3>{description}</h3>
-          <motion.div
+
+          <TagScroll time={time} skills={skills} concepts={concepts} />
+          {/* <motion.div
             animate={{ x: ["20%", "-100%"] }}
             initial={{ x: "0%" }}
             transition={{ ease: "linear", duration: 8, repeat: Infinity }}
@@ -67,7 +110,7 @@ function Modal({
             {concepts.map((concept) => (
               <p key={concept}>{concept}</p>
             ))}
-          </motion.div>
+          </motion.div> */}
 
           <div className={styles.bottomSpan}>
             <a
@@ -93,24 +136,14 @@ function Modal({
           ref={modalRef}
           onClick={handleModalClick}
         >
-          <div className={styles.leftSide}>
-            <div className={styles.imageContainer}>
-              <img src={cover} alt='' />
-            </div>
+          <div className={styles.imageContainer}>
+            <img src={cover} alt='' />
           </div>
-          <div className={styles.rightSide}>
-            <a href={link} target='_blank' rel='noopener noreferrer'>
-              <button>Find book</button>
-            </a>
-            <h2>Author: {author}</h2>
-            <h3>{oneLiner}</h3>
-          </div>
-          {/* <motion.div
-            animate={{ x: ["20%", "-100%"] }}
-            initial={{ x: "0%" }}
-            transition={{ ease: "linear", duration: 8, repeat: Infinity }}
-            className={styles.tagsContainer}
-          >
+
+          <h2>Author: {author}</h2>
+          <h3>{oneLiner}</h3>
+          <TagScroll time={time} skills={skills} concepts={concepts} />
+          {/* <motion.div {...animationConfig} className={styles.tagsContainer}>
             {skills.map((skill) => (
               <p key={skill}>{skill}</p>
             ))}
@@ -118,6 +151,11 @@ function Modal({
               <p key={concept}>{concept}</p>
             ))}
           </motion.div> */}
+          <div className={styles.actionRow}>
+            <a href={link} target='_blank' rel='noopener noreferrer'>
+              <button>Find book</button>
+            </a>
+          </div>
           <div className={styles.bottomSpan}>
             <a
               href='https://gigits.io'
